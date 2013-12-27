@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Module module</title>
+	<script src="../../libs/modernizr/modernizr.js"></script>
+</head>
+<body>
+	<script src="script.js"></script>
+	<script>
+		if(cssPath) {
+			var ss = document.createElement("link");
+			ss.type = "text/css";
+			ss.rel = "stylesheet/less";
+			ss.href = cssPath;
+			document.getElementsByTagName("head")[0].appendChild(ss);
+		}
+	</script>
+	<script src="../../libs/less/dist/less-1.5.1.min.js"></script>
+	<script src="../../js/config.js"></script>
+	<script src="../../libs/requirejs/require.js"></script>
+	<script>
+		if(jsPath) {
+			config.baseUrl = '../../';
+			delete config.deps;
+			require.config(config);
+			require([jsPath], execute);
+		}
+	</script>
+</body>
+</html>

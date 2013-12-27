@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Module module</title>
+	<link href="../../css/style.css" rel="stylesheet">
+	<script src="../../libs/modernizr/modernizr.js"></script>
+</head>
+<body>
+	<script src="../../js/config.js"></script>
+	<script src="../../libs/requirejs/require.js"></script>
+	<script>
+		config.baseUrl = '../../';
+		delete config.deps;
+		require.config(config);
+		require(['mods/module/module'], function (module) {
+			// module is ready to use
+		});
+	</script>
+</body>
+</html>

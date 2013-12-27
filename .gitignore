@@ -1,0 +1,13 @@
+# unrequired workspace files
+.DS_Store
+*.sublime-workspace
+
+# package mananger caches
+node_modules
+www/libs/*
+
+# compiled styles
+www/css/*.css*
+
+# distribution code
+dist
