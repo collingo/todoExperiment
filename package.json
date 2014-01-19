@@ -15,7 +15,8 @@
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-template-jasmine-requirejs": "~0.1.8",
     "underscore": "~1.5.2",
-    "grunt-contrib-less": "git+ssh://git@github.com/collingo/grunt-contrib-less.git"
+    "grunt-contrib-less": "git+ssh://git@github.com/collingo/grunt-contrib-less.git",
+    "bower": "~1.2.8"
   },
   "dependencies": {
     "http-proxy": "0.8.x",
@@ -23,6 +24,7 @@
   },
   "subdomain": "collingo-todo",
   "scripts": {
+    "predeploy": "npm install; node_modules/bower/bin/bower install; node_modules/grunt-cli/bin/grunt build;",
     "start": "node server.js"
   },
   "engines": {
