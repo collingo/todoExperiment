@@ -1,13 +1,20 @@
 var connect = require('connect'),
+	http = require('http'),
     localDir = 'www',
     builtDir = 'dist';
 
-if(process.env.subdomain) {
-	connect()
-		.use(connect.static(__dirname + '/' + builtDir)).listen(8080);
-} else {
-	connect()
-		.use(connect.static(__dirname + '/' + localDir)).listen(8080);
-	connect()
-		.use(connect.static(__dirname + '/' + builtDir)).listen(8081);
+var built = connect()
+	.use(connect.logger('dev'))
+	.use(connect.static(builtDir))
+	.use(connect.directory(builtDir));
+http.createServer(built).listen(8080);
+
+if(!process.env.subdomain) {
+
+	var dev = connect()
+		.use(connect.logger('dev'))
+		.use(connect.static(localDir))
+		.use(connect.directory(localDir));
+	http.createServer(dev).listen(8081);
+
 }
