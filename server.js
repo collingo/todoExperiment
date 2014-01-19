@@ -4,13 +4,10 @@ var connect = require('connect'),
 
 if(process.env.subdomain) {
 	connect()
-		.use(connect.logger('dev'))
 		.use(connect.static(__dirname + '/' + builtDir)).listen(8080);
 } else {
 	connect()
-		.use(connect.logger('dev'))
 		.use(connect.static(__dirname + '/' + localDir)).listen(8080);
 	connect()
-		.use(connect.logger('dev'))
 		.use(connect.static(__dirname + '/' + builtDir)).listen(8081);
 }
