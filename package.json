@@ -20,5 +20,12 @@
   "dependencies": {
     "http-proxy": "0.8.x",
     "connect": "2.3.x"
+  },
+  "subdomain": "collingo-todo",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "0.10.x"
   }
 }
