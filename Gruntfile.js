@@ -1,14 +1,14 @@
 /*global module: true */
 var customJsGlob = [
 		'./*.js',
-		'./www/js/**/*.js',
-		'./www/mods/**/*.js'
+		'./dev/js/**/*.js',
+		'./dev/mods/**/*.js'
 	],
 	customCssGlob = [
-		'./www/css/**/*.{less,styl,scss,sass}',
-		'./www/mods/**/*.{less,styl,scss,sass}'
+		'./dev/css/**/*.{less,styl,scss,sass}',
+		'./dev/mods/**/*.{less,styl,scss,sass}'
 	],
-	requireConfig = require('./www/js/config'),
+	requireConfig = require('./dev/js/config'),
 	_ = require('underscore');
 
 module.exports = function (grunt) {
@@ -33,11 +33,11 @@ module.exports = function (grunt) {
 					compress: true,
 					sourceMap: true,
 					sourceMapFilename: 'css/style.css.map',
-					sourceMapBasepath: 'www/',
+					sourceMapBasepath: 'dev/',
 					sourceMapRootpath: '/'
 				},
 				files: {
-					'www/css/style.css': 'www/css/style.less'
+					'dev/css/style.css': 'dev/css/style.less'
 				}
 			}
 		},
@@ -51,13 +51,13 @@ module.exports = function (grunt) {
 
 		jasmine: {
 			run: {
-				src: ['www/mods/*/*.js', '!www/mods/*/*spec.js'],
+				src: ['dev/mods/*/*.js', '!dev/mods/*/*spec.js'],
 				options: {
-					specs: 'www/mods/*/*spec.js',
+					specs: 'dev/mods/*/*spec.js',
 					template: require('grunt-template-jasmine-requirejs'),
 					templateOptions: {
 						requireConfig: _.extend({}, requireConfig, {
-							baseUrl: 'www/'
+							baseUrl: 'dev/'
 						})
 					}
 				}
@@ -65,48 +65,48 @@ module.exports = function (grunt) {
 		},
 
 		clean: {
-			newBuild: ['dist','dist/**'],
-			dist: [
-				'dist/libs/**/*',
-				'!dist/libs',
-				'!dist/libs/requirejs',
-				'!dist/libs/requirejs/require.js',
-				'!dist/libs/modernizr',
-				'!dist/libs/modernizr/modernizr.js',
-				'!dist/libs/normalize-less',
-				'!dist/libs/normalize-less/normalize.less'
+			www: ['www','www/**'],
+			built: [
+				'www/libs/**/*',
+				'!www/libs',
+				'!www/libs/requirejs',
+				'!www/libs/requirejs/require.js',
+				'!www/libs/modernizr',
+				'!www/libs/modernizr/modernizr.js',
+				'!www/libs/normalize-less',
+				'!www/libs/normalize-less/normalize.less'
 			]
 		},
 
 		uglify: {
 			config: {
 				files: {
-					"dist/js/config.js": "dist/js/config.js"
+					"www/js/config.js": "www/js/config.js"
 				}
 			},
 			libs: {
 				files: [{
 					expand: true,
-					cwd: 'dist/libs/',
+					cwd: 'www/libs/',
 					src: ['**/*.js'],
-					dest: 'dist/libs/'
+					dest: 'www/libs/'
 				}]
 			}
 		},
 
 		requirejs: {
-			dist: {
+			build: {
 				options: _.extend({}, requireConfig, {
-					baseUrl: "www",
+					baseUrl: "dev",
 					name: 'js/init',
-					mainConfigFile: "www/js/config.js",
+					mainConfigFile: "dev/js/config.js",
 					optimize: 'uglify2',
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					skipDirOptimize: true,
 					optimizeCss: false,
 					wrap: true,
-					dir: 'dist',
+					dir: 'www',
 					normalizeDirDefines: 'all',
 					stubModules: ['text', 'hbars'],
 					removeCombined: true
@@ -138,8 +138,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('test', 'Run the tests', function(module) {
 		var jsPath, specPath;
 		if (arguments.length > 0) {
-			jsPath = 'www/mods/'+module+'/'+module+'.js',
-			specPath = 'www/mods/'+module+'/'+module+'-spec.js';
+			jsPath = 'dev/mods/'+module+'/'+module+'.js',
+			specPath = 'dev/mods/'+module+'/'+module+'-spec.js';
 			grunt.config.set('jasmine.run.src', [jsPath]);
 			grunt.config.set('jasmine.run.options.specs', [specPath]);
 			grunt.log.writeln("Testing " + module);
@@ -148,6 +148,6 @@ module.exports = function (grunt) {
 		}
 		grunt.task.run('jasmine');
 	});
-	grunt.registerTask('build', ['clean:newBuild', 'jshint', 'css', 'requirejs', 'clean:dist', 'uglify']);
+	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'requirejs', 'clean:built', 'uglify']);
 
 };
