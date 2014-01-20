@@ -129,8 +129,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('css', ['less']);
 	grunt.registerTask('server', 'Start a custom web server', function() {
 		require('./server.js');
-		grunt.log.writeln('Local development server started on http://localhost:8080/');
-		grunt.log.writeln('Local distribution server started on http://localhost:9090/');
 	});
 
 	// command line tasks

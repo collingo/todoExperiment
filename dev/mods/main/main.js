@@ -54,7 +54,7 @@ define([
 		"children": [],
 		"parent": 2
 	}];
-	
+
 	$('body').append('<h1>Think.Do</h1>');
 
 	var todos = {
@@ -74,14 +74,16 @@ define([
 			var todo = todos.get(id);
 			console.log(id, todo);
 			html += '<li><p>'+todo.text+'<input type="checkbox" /></p>';
-			if(todo.children.length) html += recursiveRender(todo.children);
+			if(todo.children.length) {
+				html += recursiveRender(todo.children);
+			}
 			html += '</li>';
 		});
 		return html+"</ul>";
 	}
 	var html = recursiveRender(todo0.children);
 	$('body').append(html);
-	
+
 	// paginated
 	function renderList(todo) {
 		var html = '<ul>';
