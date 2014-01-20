@@ -1,1 +1,1 @@
-Blah
+<span class="text">{{text}}</span> <input type="checkbox"{{#if done}} checked="checked"{{/if}} />

@@ -18,6 +18,7 @@
 	"white": false,
 
 	"globals": {
+		"window": true,
 		"require": true,
 		"requirejs": true,
 		"define": true,

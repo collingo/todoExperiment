@@ -9,7 +9,10 @@ var config = {
 		jquery: 'libs/jquery/jquery',
 		text: 'libs/requirejs-text/text',
 		Handlebars: 'libs/handlebars/handlebars',
-		hbars: 'libs/requirejs-handlebars/hbars'
+		hbars: 'libs/requirejs-handlebars/hbars',
+		crossroads: 'libs/crossroads/dist/crossroads',
+		signals: 'libs/signals/dist/signals',
+		hasher: 'libs/hasher/dist/js/hasher'
 	},
 
 	shim: {

@@ -1,15 +1,26 @@
 define([
+	'underscore/objects/assign',
 	'underscore/collections/forEach',
 	'underscore/collections/where',
-	'jquery'
+	'jquery',
+	'crossroads',
+	'hasher',
+
+	'mods/list/list'
 ], function(
+	_extend,
 	_forEach,
 	_where,
-	$
+	$,
+	crossroads,
+	hasher,
+
+	ListView
 ) {
 
-	var data = [{
+	window.data = [{
 		"id": 0,
+		"text": "Think.Do",
 		"children": [1,2,3,4]
 	}, {
 		"id": 1,
@@ -55,51 +66,44 @@ define([
 		"parent": 2
 	}];
 
-	$('body').append('<h1>Think.Do</h1>');
-
 	var todos = {
 		get: function(id) {
-			return _where(data, {
+			return _where(window.data, {
 				id: id
 			})[0];
 		}
 	};
 
-	var todo0 = todos.get(0);
-
-	// recursive
-	function recursiveRender(children) {
-		var html = "<ul>";
-		_forEach(children, function(id) {
-			var todo = todos.get(id);
-			console.log(id, todo);
-			html += '<li><p>'+todo.text+'<input type="checkbox" /></p>';
-			if(todo.children.length) {
-				html += recursiveRender(todo.children);
-			}
-			html += '</li>';
-		});
-		return html+"</ul>";
+	//handle hash changes
+	function handleChanges(newHash, oldHash){
+		var data = buildViewObject(parseInt(newHash, 10) || 0);
+		$('body').empty().append(new ListView(data));
 	}
-	var html = recursiveRender(todo0.children);
-	$('body').append(html);
 
-	// paginated
-	function renderList(todo) {
-		var html = '<ul>';
-		_forEach(todo.children, function(id) {
-			var child = todos.get(id);
-			console.log(id, child);
-			html += '<li><p>'+child.text+'<input type="checkbox" /></p></li>';
-		});
-		return html+"</ul>";
+	hasher.changed.add(handleChanges); //add hash change listener
+	hasher.initialized.add(handleChanges); //add initialized listener (to grab initial value in case it is already set)
+	hasher.init(); //initialize hasher (start listening for history changes)
+
+	hasher.setHash(0); //change hash value (generates new history record)
+
+	function buildViewObject(id) {
+		var obj = _extend({}, todos.get(id));
+		if(obj.children.length) {
+			var children = [];
+			_forEach(obj.children, function(id) {
+				children.push(_extend({}, todos.get(id)));
+			});
+			obj.children = children;
+		}
+		if(obj.parent) {
+			var parentChildren = [];
+			obj.parent = todos.get(id);
+			_forEach(obj.parent.children, function(id) {
+				parentChildren.push(_extend({}, todos.get(id)));
+			});
+			obj.parent.children = parentChildren;
+		}
+		return obj;
 	}
-	var todo2 = todos.get(2);
-	var todoP = todos.get(todo2.parent);
-	var htmlP = renderList(todoP);
-	$('body').append(htmlP);
-	var html0 = renderList(todo2);
-	$('body').append(html0);
-
 
 });

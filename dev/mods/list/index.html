@@ -13,8 +13,26 @@
 		config.baseUrl = '../../';
 		delete config.deps;
 		require.config(config);
-		require(['mods/module/module'], function (module) {
-			// module is ready to use
+		require(['mods/list/list'], function (Module) {
+			var item = new Module({
+				id: 4,
+				text: "vruehgrege",
+				done: true,
+				children: [{
+					id: 5,
+					text: "ghtahta",
+					done: false
+				}, {
+					id: 6,
+					text: "kjutfkuf",
+					done: true
+				}, {
+					id: 7,
+					text: "wefwfew",
+					done: false
+				}]
+			});
+			document.body.appendChild(item);
 		});
 	</script>
 </body>

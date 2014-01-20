@@ -14,7 +14,11 @@
 		delete config.deps;
 		require.config(config);
 		require(['mods/item/item'], function (Module) {
-			var item = new Module();
+			var item = new Module({
+				id: 4,
+				text: "vruehgrege",
+				done: true
+			});
 			document.body.appendChild(item);
 		});
 	</script>
