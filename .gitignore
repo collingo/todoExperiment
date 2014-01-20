@@ -2,6 +2,8 @@
 .DS_Store
 *.sublime-workspace
 npm-debug.log
+package
+*.tgz
 
 # package mananger caches
 node_modules
