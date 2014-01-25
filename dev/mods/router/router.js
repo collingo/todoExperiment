@@ -1,13 +1,13 @@
 define([
-	'underscore/objects/assign',
+	'underscore/objects/cloneDeep',
 	'underscore/collections/forEach',
 	'jquery',
 
 	'mods/list/list',
 	'mods/data/data',
-	'mods/events/events'
+	'events'
 ], function(
-	_extend,
+	_clone,
 	_forEach,
 	$,
 
@@ -29,21 +29,21 @@ define([
 	Router.prototype = {
 		constructor: Router,
 		buildViewObject: function(id) {
-			var obj = _extend({}, data.get(id));
+			var obj = _clone(data.get(id));
 			if(obj.children.length) {
 				var children = [];
 				_forEach(obj.children, function(id) {
-					children.push(_extend({}, data.get(id)));
+					children.push(_clone(data.get(id)));
 				});
 				obj.children = children;
 			}
 			if(obj.parent) {
 				var parentChildren = [];
-				obj.parent = data.get(id);
-				_forEach(obj.parent.children, function(id) {
-					parentChildren.push(_extend({}, data.get(id)));
-				});
-				obj.parent.children = parentChildren;
+				obj.parent = data.get(obj.parent);
+				// _forEach(obj.parent.children, function(pcid) {
+				// 	parentChildren.push(_clone(data.get(pcid)));
+				// });
+				// obj.parent.children = parentChildren;
 			}
 			return obj;
 		},
@@ -66,8 +66,8 @@ define([
 				}
 			}
 
-			var data = this.buildViewObject(parseInt(to, 10) || 0);
-			$('body').empty().append(new ListView(data));
+			var viewdata = this.buildViewObject(parseInt(to, 10) || 0);
+			$('body').empty().append(new ListView(viewdata));
 		}
 	};
 

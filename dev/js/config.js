@@ -14,7 +14,8 @@ var config = {
 		signals: 'libs/signals/dist/signals',
 		hasher: 'libs/hasher/dist/js/hasher',
 		history: 'libs/history/scripts/uncompressed/history',
-		router: 'mods/router/router'
+		router: 'mods/router/router',
+		events: 'mods/events/events'
 	},
 
 	shim: {

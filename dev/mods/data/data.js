@@ -4,9 +4,9 @@ define([
 	_where
 ) {
 
-	var storage = [{
+	var storage = window.storage = [{
 		"id": 0,
-		"text": "Think.Do",
+		"text": "Think.Do.",
 		"children": [1,2,3,4]
 	}, {
 		"id": 1,

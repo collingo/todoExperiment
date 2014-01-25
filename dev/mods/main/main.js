@@ -5,7 +5,7 @@ define([
 	'jquery',
 
 	'router',
-	'mods/events/events'
+	'events'
 ], function(
 	_extend,
 	_forEach,
