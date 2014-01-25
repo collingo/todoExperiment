@@ -17,13 +17,14 @@ function(
 
 	function ListView(data) {
 		this.data = data;
-		this.el = $('<div></div>');
+		this.el = $('<div class="listview"></div>');
 		this.render.call(this);
 		this.list = this.el.find('ul');
 		if(this.data.children.length) {
 			this.renderChildren.call(this);
 		}
 		this.el.find('.navButton').on('click', this.onNav.bind(this));
+
 		return this.el[0];
 	}
 	ListView.prototype = {
