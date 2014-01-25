@@ -11,8 +11,10 @@ var config = {
 		Handlebars: 'libs/handlebars/handlebars',
 		hbars: 'libs/requirejs-handlebars/hbars',
 		crossroads: 'libs/crossroads/dist/crossroads',
-		signals: 'libs/js-signals/dist/signals',
-		hasher: 'libs/hasher/dist/js/hasher'
+		signals: 'libs/signals/dist/signals',
+		hasher: 'libs/hasher/dist/js/hasher',
+		history: 'libs/history/scripts/uncompressed/history',
+		router: 'mods/router/router'
 	},
 
 	shim: {

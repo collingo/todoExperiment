@@ -16,9 +16,12 @@
 	"trailing": true,
 	"smarttabs": true,
 	"white": false,
+	"browser": true,
+	"devel": true,
 
 	"globals": {
-		"window": true,
+		"history": true,
+		"History": true,
 		"require": true,
 		"requirejs": true,
 		"define": true,

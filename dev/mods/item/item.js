@@ -1,12 +1,12 @@
 define([
 	'jquery',
 	'hbars!mods/item/item',
-	'hasher'
+	'mods/events/events'
 ],
 function(
 	$,
 	template,
-	hasher
+	events
 ){
 
 	function ItemView(data) {
@@ -19,7 +19,7 @@ function(
 	ItemView.prototype = {
 		constructor: ItemView,
 		onClick: function() {
-			hasher.setHash(this.data.id);
+			events.fire('go', this.data.id);
 		},
 		render: function() {
 			this.el.append(template(this.data));
