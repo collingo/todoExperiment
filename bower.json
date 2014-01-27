@@ -11,10 +11,6 @@
     "less": "~1.5.1",
     "history": "~1.8.0",
     "signals": "~1.0.0",
-    "dom": "git@github.com:component/dom.git#~0.9.0",
-    "query": "git@github.com:component/query.git#~0.0.2",
-    "domify": "git@github.com:component/domify.git#~1.2.0",
-    "event": "git@github.com:component/event.git#~0.1.2",
-    "delegate": "git@github.com:component/delegate.git#~0.2.1"
+    "dom": "git@github.com:component/dom.git#~0.9.0"
   }
 }
