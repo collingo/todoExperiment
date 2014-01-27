@@ -1,11 +1,11 @@
 define([
-	'jquery',
+	'dom',
 	'hbars!mods/item/item',
 	'events',
 	'underscore/objects/assign'
 ],
 function(
-	$,
+	dom,
 	template,
 	events,
 	_extend
@@ -13,11 +13,11 @@ function(
 
 	function ItemView(data) {
 		this.data = data;
-		this.el = $('<li class="item"></li>');
+		this.el = dom('<li class="item"></li>');
 		this.render.call(this);
 		this.el.find('.state').on('click', this.onToggle.bind(this));
 		this.el.on('click', this.onClick.bind(this));
-		return this.el[0];
+		return this.el;
 	}
 	ItemView.prototype = {
 		constructor: ItemView,
@@ -31,7 +31,7 @@ function(
 			var viewdata = _extend({}, this.data, {
 				childCount: this.data.children.length ? this.data.children.length : ""
 			});
-			this.el.append(template(viewdata));
+			this.el.html(template(viewdata));
 		},
 		toggle: function() {
 			this.data.done = !this.data.done;

@@ -1,5 +1,5 @@
 define([
-	'jquery',
+	'dom',
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
@@ -7,7 +7,7 @@ define([
 	'events'
 ],
 function(
-	$,
+	dom,
 	template,
 	_forEach,
 	_extend,
@@ -17,7 +17,7 @@ function(
 
 	function ListView(data) {
 		this.data = data;
-		this.el = $('<div class="listview"></div>');
+		this.el = dom('<div class="listview"></div>');
 		this.render.call(this);
 		this.list = this.el.find('ul');
 		if(this.data.children.length) {
@@ -25,7 +25,7 @@ function(
 		}
 		this.el.find('.navButton').on('click', this.onNav.bind(this));
 
-		return this.el[0];
+		return this.el;
 	}
 	ListView.prototype = {
 		constructor: ListView,
@@ -34,13 +34,15 @@ function(
 				navButton: "Back",
 				contextButton: "Edit"
 			});
-			this.el.append(template(viewdata));
+			this.el.html(template(viewdata));
 		},
 		renderChildren: function() {
 			_forEach(this.data.children, this.appendChild.bind(this));
 		},
 		appendChild: function(childData) {
-			this.list.append(new ItemView(_extend({}, childData)));
+			console.log("freagrea");
+			var item = new ItemView(_extend({}, childData));
+			this.list.append(item);
 		},
 		onNav: function(e) {
 			e.preventDefault();

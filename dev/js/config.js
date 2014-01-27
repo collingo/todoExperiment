@@ -6,13 +6,11 @@ var config = {
 
 	paths: {
 		underscore: 'libs/lodash-amd/modern',
-		jquery: 'libs/jquery/jquery',
+		dom: 'libs/dom/dom',
 		text: 'libs/requirejs-text/text',
 		Handlebars: 'libs/handlebars/handlebars',
 		hbars: 'libs/requirejs-handlebars/hbars',
-		crossroads: 'libs/crossroads/dist/crossroads',
 		signals: 'libs/signals/dist/signals',
-		hasher: 'libs/hasher/dist/js/hasher',
 		history: 'libs/history/scripts/uncompressed/history',
 		router: 'mods/router/router',
 		events: 'mods/events/events'

@@ -2,7 +2,7 @@ define([
 	'underscore/objects/assign',
 	'underscore/collections/forEach',
 	'underscore/collections/where',
-	'jquery',
+	'dom',
 
 	'router',
 	'events'
@@ -16,12 +16,7 @@ define([
 	events
 ) {
 
-	// $('html').on('.toolbar', 'touchstart', function(e) {
-	// 	e.preventDefault();
-	// 	e.stopPropagation();
-	// 	return false;
-	// });
-
+	// prevent scroll on toolbar
 	document.body.addEventListener('touchmove', function(e) {
 		if ($(e.target).parent('.toolbar').length) {
 			e.preventDefault();

@@ -7,10 +7,10 @@
     "normalize-less": "*",
     "requirejs-handlebars": "git@github.com:jfparadis/requirejs-handlebars.git",
     "requirejs-text": "~2.0.10",
-    "jquery": "~2.0.3",
     "handlebars": "~1.1.2",
     "less": "~1.5.1",
     "history": "~1.8.0",
-    "signals": "~1.0.0"
+    "signals": "~1.0.0",
+    "dom": "git@github.com:component/dom.git#~0.9.0"
   }
 }

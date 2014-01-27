@@ -1,7 +1,7 @@
 define([
 	'underscore/objects/cloneDeep',
 	'underscore/collections/forEach',
-	'jquery',
+	'dom',
 
 	'mods/list/list',
 	'mods/data/data',
@@ -40,10 +40,6 @@ define([
 			if(obj.parent) {
 				var parentChildren = [];
 				obj.parent = data.get(obj.parent);
-				// _forEach(obj.parent.children, function(pcid) {
-				// 	parentChildren.push(_clone(data.get(pcid)));
-				// });
-				// obj.parent.children = parentChildren;
 			}
 			return obj;
 		},
@@ -67,7 +63,12 @@ define([
 			}
 
 			var viewdata = this.buildViewObject(parseInt(to, 10) || 0);
-			$('body').empty().append(new ListView(viewdata));
+
+			$('body')
+				.empty()
+				.append(
+					new ListView(viewdata)
+				);
 		}
 	};
 
