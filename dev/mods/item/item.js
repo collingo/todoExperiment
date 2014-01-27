@@ -2,25 +2,30 @@ define([
 	'dom',
 	'hbars!mods/item/item',
 	'events',
-	'underscore/objects/assign'
+	'underscore/objects/assign',
+	'baseView'
 ],
 function(
 	dom,
 	template,
 	events,
-	_extend
+	_extend,
+	BaseView
 ){
 
 	function ItemView(data) {
 		this.data = data;
 		this.el = dom('<li class="item"></li>');
 		this.render.call(this);
-		this.el.find('.state').on('click', this.onToggle.bind(this));
-		this.el.on('click', this.onClick.bind(this));
+		this.init.call(this);
 		return this.el;
 	}
-	ItemView.prototype = {
+	ItemView.prototype = _extend({}, BaseView, {
 		constructor: ItemView,
+		bindEvents: function() {
+			this.el.find('.state').on('click', this.onToggle.bind(this));
+			this.el.on('click', this.onClick.bind(this));
+		},
 		onClick: function() {
 			events.fire('go', this.data.id);
 		},
@@ -37,7 +42,7 @@ function(
 			this.data.done = !this.data.done;
 			this.render();
 		}
-	};
+	});
 
 	return ItemView;
 

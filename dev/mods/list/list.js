@@ -3,6 +3,7 @@ define([
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
+	'baseView',
 	'mods/item/item',
 	'events'
 ],
@@ -11,6 +12,7 @@ function(
 	template,
 	_forEach,
 	_extend,
+	BaseView,
 	ItemView,
 	events
 ){
@@ -19,28 +21,27 @@ function(
 		this.data = data;
 		this.el = dom('<div class="listview"></div>');
 		this.render.call(this);
-		this.list = this.el.find('ul');
-		if(this.data.children.length) {
-			this.renderChildren.call(this);
-		}
-		this.el.find('.navButton').on('click', this.onNav.bind(this));
-
+		this.init.call(this);
 		return this.el;
 	}
-	ListView.prototype = {
+	ListView.prototype = _extend({}, BaseView, {
 		constructor: ListView,
+		bindEvents: function() {
+			this.el.find('.navButton').on('click', this.onNav.bind(this));
+		},
 		render: function() {
 			var viewdata = _extend({}, this.data, {
 				navButton: "Back",
 				contextButton: "Edit"
 			});
 			this.el.html(template(viewdata));
+			this.list = this.el.find('ul');
+			this.renderChildren.call(this);
 		},
 		renderChildren: function() {
 			_forEach(this.data.children, this.appendChild.bind(this));
 		},
 		appendChild: function(childData) {
-			console.log("freagrea");
 			var item = new ItemView(_extend({}, childData));
 			this.list.append(item);
 		},
@@ -48,7 +49,7 @@ function(
 			e.preventDefault();
 			events.fire('go', this.data.parent.id);
 		}
-	};
+	});
 
 	return ListView;
 

@@ -5,6 +5,7 @@ var config = {
 	deps: ['js/init'],
 
 	paths: {
+		baseView: 'mods/baseView/client',
 		underscore: 'libs/lodash-amd/modern',
 		dom: 'libs/dom/dom',
 		text: 'libs/requirejs-text/text',
