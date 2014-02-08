@@ -11,6 +11,7 @@ var customJsGlob = [
 	requireConfig = require('./dev/js/config'),
 	_ = require('underscore');
 
+
 module.exports = function (grunt) {
 
 	//Config
@@ -94,19 +95,44 @@ module.exports = function (grunt) {
 			}
 		},
 
+		copy: {
+			www: {
+				files: [{
+					expand: true,
+					cwd: 'dev/',
+					src: ['**'],
+					dest: 'www/'
+				}]
+			}
+		},
+
+		processhtml: {
+			options: {
+				// Task-specific options go here.
+			},
+			build: {
+				files: {
+					'www/index.html': ['www/index.html']
+				}
+			}
+		},
+
 		requirejs: {
 			build: {
 				options: _.extend({}, requireConfig, {
-					baseUrl: "dev",
-					name: 'js/init',
-					mainConfigFile: "dev/js/config.js",
+					baseUrl: "www",
+					almond: true,
+					name: 'libs/almond/almond',
+					include: ['js/init.js'],
+					out: "www/js/init.js",
+					mainConfigFile: "www/js/config.js",
 					optimize: 'uglify2',
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					skipDirOptimize: true,
 					optimizeCss: false,
 					wrap: true,
-					dir: 'www',
+					// dir: 'www',
 					normalizeDirDefines: 'all',
 					stubModules: ['text', 'hbars'],
 					removeCombined: true
@@ -124,6 +150,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jasmine');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-processhtml');
 
 	// helper tasks (do not call from command line)
 	grunt.registerTask('css', ['less']);
@@ -146,6 +174,6 @@ module.exports = function (grunt) {
 		}
 		grunt.task.run('jasmine');
 	});
-	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'requirejs', 'clean:built', 'uglify']);
+	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'copy', 'requirejs', 'clean:built', 'processhtml', 'uglify']);
 
 };
