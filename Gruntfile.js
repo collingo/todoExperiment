@@ -68,10 +68,12 @@ module.exports = function (grunt) {
 		clean: {
 			www: ['www','www/**'],
 			built: [
+				'www/js/config.js',
 				'www/libs/**/*',
+				'www/mods/*/*.html',
+				'www/mods/*/*.hb',
+				'www/mods/*/*-spec.js',
 				'!www/libs',
-				'!www/libs/requirejs',
-				'!www/libs/requirejs/require.js',
 				'!www/libs/modernizr',
 				'!www/libs/modernizr/modernizr.js',
 				'!www/libs/normalize-less',
@@ -80,11 +82,6 @@ module.exports = function (grunt) {
 		},
 
 		uglify: {
-			config: {
-				files: {
-					"www/js/config.js": "www/js/config.js"
-				}
-			},
 			libs: {
 				files: [{
 					expand: true,
