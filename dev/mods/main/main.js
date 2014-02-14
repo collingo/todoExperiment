@@ -23,6 +23,6 @@ define([
 		}
     }, false);
 
-	events.fire('go', 0);
+	router.goNo();
 
 });

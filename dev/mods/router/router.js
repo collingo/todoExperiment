@@ -16,15 +16,16 @@ define([
 	events
 ) {
 
-	function Router(routes) {
+	function Router(firstRoute, routes) {
 		this.routes = routes;
 
 		history.replaceState({
-			url: 0
-		}, 0, 0);
+			url: '/'
+		}, '/', '/');
 		window.onpopstate = this.onPop.bind(this);
 		this.onGo = this.onGo.bind(this);
 		events.on('go', this.onGo);
+		this.processView(firstRoute);
 	}
 	Router.prototype = {
 		constructor: Router,
@@ -57,12 +58,14 @@ define([
 					}, to, to);
 				} else {
 					history.pushState({
-						url: 0
-					}, 0, '/');
+						url: '/'
+					}, '/', '/');
 				}
 			}
-
-			var viewdata = this.buildViewObject(parseInt(to, 10) || 0);
+			this.processView(to);
+		},
+		processView: function(location) {
+			var viewdata = this.buildViewObject(parseInt(location, 10) || 0);
 
 			$('body')
 				.empty()
@@ -72,8 +75,11 @@ define([
 		}
 	};
 
-	return new Router({
+	var router = new Router();
 
-	});
+	return {
+		goTo: router.go,
+		goNo: router.processView
+	};
 
 });
