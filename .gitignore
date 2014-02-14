@@ -5,6 +5,10 @@ npm-debug.log
 package
 *.tgz
 
+# test files
+.grunt
+_SpecRunner.html
+
 # package mananger caches
 node_modules
 dev/libs/*
