@@ -16,7 +16,7 @@ define([
 	events
 ) {
 
-	function Router(firstRoute, routes) {
+	function Router(routes) {
 		this.routes = routes;
 
 		history.replaceState({
@@ -25,7 +25,6 @@ define([
 		window.onpopstate = this.onPop.bind(this);
 		this.onGo = this.onGo.bind(this);
 		events.on('go', this.onGo);
-		this.processView(firstRoute);
 	}
 	Router.prototype = {
 		constructor: Router,
