@@ -23,6 +23,6 @@ define([
 		}
     }, false);
 
-	router.goNo();
+	router.init();
 
 });

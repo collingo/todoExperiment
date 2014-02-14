@@ -29,6 +29,9 @@ define([
 	}
 	Router.prototype = {
 		constructor: Router,
+		init: function() {
+			this.processView();
+		},
 		buildViewObject: function(id) {
 			var obj = _clone(data.get(id));
 			if(obj.children.length) {
@@ -78,8 +81,7 @@ define([
 	var router = new Router();
 
 	return {
-		goTo: router.go,
-		goNo: router.processView
+		init: router.init
 	};
 
 });
