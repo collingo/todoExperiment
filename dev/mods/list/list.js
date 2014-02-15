@@ -30,10 +30,10 @@ function(
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
 		},
 		render: function() {
-			var viewdata = _extend({}, this.data, {
-				navButton: "Back",
-				contextButton: "Edit"
-			});
+			var viewdata = _extend({}, this.data);
+			if(this.data.hasOwnProperty('parent')) {
+				viewdata.navButton = "Back";
+			}
 			this.el.html(template(viewdata));
 			this.list = this.el.find('ul');
 			this.renderChildren.call(this);
