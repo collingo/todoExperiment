@@ -21,7 +21,9 @@
     "grunt-contrib-less": "~0.9.0"
   },
   "dependencies": {
-    "connect": "2.3.x"
+    "connect": "2.3.x",
+    "express": "~3.4.8",
+    "handlebars": "~2.0.0-alpha.1"
   },
   "subdomain": "collingo-todo",
   "scripts": {

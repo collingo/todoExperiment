@@ -23,6 +23,6 @@ define([
 		}
     }, false);
 
-	router.init();
+	router.init(window.initId);
 
 });

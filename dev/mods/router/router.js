@@ -16,18 +16,16 @@ define([
 	events
 ) {
 
-	function Router(routes) {
-		this.routes = routes;
-
-		this.replace();
+	function Router() {
 		window.onpopstate = this.onPop.bind(this);
 		this.onGo = this.onGo.bind(this);
 		events.on('go', this.onGo);
 	}
 	Router.prototype = {
 		constructor: Router,
-		init: function() {
-			this.processView();
+		init: function(id) {
+			this.replace(id);
+			this.processView(id);
 		},
 		push: function(to) {
 			to = to || '/';

@@ -107,7 +107,7 @@ module.exports = function (grunt) {
 			},
 			build: {
 				files: {
-					'www/index.html': ['www/index.html']
+					'www/index.hbs': ['www/index.hbs']
 				}
 			}
 		},
