@@ -34,7 +34,8 @@ module.exports = function (grunt) {
 					compress: true,
 					sourceMap: true,
 					sourceMapFilename: 'dev/css/style.css.map',
-					sourceMapBasepath: 'dev/'
+					sourceMapBasepath: 'dev/',
+					sourceMapRootpath: '../'
 				},
 				files: {
 					'dev/css/style.css': 'dev/css/style.less'
