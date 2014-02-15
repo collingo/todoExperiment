@@ -1,6 +1,6 @@
 {
   "name": "todo",
-  "version": "0.0.1-14",
+  "version": "0.0.1-42",
   "author": "Nick Collings",
   "preferGlobal": false,
   "devDependencies": {
@@ -23,7 +23,8 @@
   "dependencies": {
     "connect": "2.3.x",
     "express": "~3.4.8",
-    "handlebars": "~2.0.0-alpha.1"
+    "handlebars": "~2.0.0-alpha.1",
+    "express3-handlebars": "~0.5.0"
   },
   "subdomain": "collingo-todo",
   "scripts": {
