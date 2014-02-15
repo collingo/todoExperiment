@@ -19,9 +19,7 @@ define([
 	function Router(routes) {
 		this.routes = routes;
 
-		history.replaceState({
-			url: '/'
-		}, '/', '/');
+		this.replace();
 		window.onpopstate = this.onPop.bind(this);
 		this.onGo = this.onGo.bind(this);
 		events.on('go', this.onGo);
@@ -30,6 +28,18 @@ define([
 		constructor: Router,
 		init: function() {
 			this.processView();
+		},
+		push: function(to) {
+			to = to || '/';
+			history.pushState({
+				url: to
+			}, to, to);
+		},
+		replace: function(to) {
+			to = to || '/';
+			history.replaceState({
+				url: to
+			}, to, to);
 		},
 		buildViewObject: function(id) {
 			var obj = _clone(data.get(id));
@@ -54,15 +64,7 @@ define([
 		},
 		go: function(to, isPop) {
 			if(!isPop) {
-				if(to) {
-					history.pushState({
-						url: to
-					}, to, to);
-				} else {
-					history.pushState({
-						url: '/'
-					}, '/', '/');
-				}
+				this.push(to);
 			}
 			this.processView(to);
 		},
