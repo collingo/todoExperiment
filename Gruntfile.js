@@ -74,8 +74,6 @@ module.exports = function (grunt) {
 				'www/mods/*/*.hb',
 				'www/mods/*/*-spec.js',
 				'!www/libs',
-				'!www/libs/modernizr',
-				'!www/libs/modernizr/modernizr.js',
 				'!www/libs/normalize-less',
 				'!www/libs/normalize-less/normalize.less'
 			]

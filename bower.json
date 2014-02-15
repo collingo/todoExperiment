@@ -3,7 +3,6 @@
   "dependencies": {
     "lodash-amd": "~2.3.0",
     "requirejs": "~2.1.9",
-    "modernizr": "~2.7.0",
     "normalize-less": "*",
     "requirejs-handlebars": "git://github.com/jfparadis/requirejs-handlebars.git",
     "requirejs-text": "~2.0.10",
