@@ -158,16 +158,26 @@ module.exports = function (grunt) {
 
 	// command line tasks
 	grunt.registerTask('default', ['css', 'jshint', 'server', 'watch']);
-	grunt.registerTask('test', 'Run the tests', function(module) {
-		var jsPath, specPath;
+	grunt.registerTask('test', 'Run the tests', function(moduleToTest) {
+		var allSpecs,
+			specSetup,
+			module = moduleToTest;
 		if (arguments.length > 0) {
-			jsPath = 'dev/mods/'+module+'/'+module+'.js',
-			specPath = 'dev/mods/'+module+'/'+module+'-spec.js';
-			grunt.config.set('jasmine.run.src', [jsPath]);
-			grunt.config.set('jasmine.run.options.specs', [specPath]);
+			grunt.config.set('jasmine.run.src', ['dev/mods/'+module+'/'+module+'.js']);
+			grunt.config.set('jasmine.run.options.specs', ['dev/mods/'+module+'/'+module+'-spec.js']);
 			grunt.log.writeln("Testing " + module);
 		} else {
 			grunt.log.writeln('Running all tests');
+			specSetup = grunt.config.get('jasmine.run');
+			var newSetup = {};
+			_.each(grunt.file.expand(grunt.config.get('jasmine.run.options.specs')), function(path) {
+				var module = path.split('/')[2];
+				newSetup[module] = _.extend({}, specSetup);
+				newSetup[module].src = ['dev/mods/'+module+'/'+module+'.js'];
+				newSetup[module].options = _.extend({}, specSetup.options);
+				newSetup[module].options.specs = ['dev/mods/'+module+'/'+module+'-spec.js'];
+			});
+			grunt.config.set('jasmine', newSetup);
 		}
 		grunt.task.run('jasmine');
 	});
