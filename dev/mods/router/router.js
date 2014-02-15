@@ -80,7 +80,7 @@ define([
 	var router = new Router();
 
 	return {
-		init: router.init
+		init: router.init.bind(router)
 	};
 
 });
