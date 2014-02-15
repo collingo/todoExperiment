@@ -28,6 +28,9 @@ function(
 		constructor: ListView,
 		bindEvents: function() {
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
+		    this.el.find('.toolbar').on('touchmove', function(e) {
+				e.preventDefault();
+			});
 		},
 		render: function() {
 			var viewdata = _extend({}, this.data);
