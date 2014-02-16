@@ -26,7 +26,7 @@ function setupServer(name, port, directory) {
 var built = setupServer("Built", 8080, builtDir);
 
 // serve development code when not in production
-if(!process.env.subdomain) {
+if(!process.env.SUBDOMAIN) {
 
 	var dev = setupServer("Local", 8081, devDir);
 
