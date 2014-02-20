@@ -5,7 +5,6 @@ var config = {
 	deps: ['js/init'],
 
 	paths: {
-		baseView: 'mods/baseView/client',
 		underscore: 'libs/lodash-amd/modern',
 		dom: 'libs/dom/dom',
 		text: 'libs/requirejs-text/text',
@@ -14,7 +13,10 @@ var config = {
 		signals: 'libs/signals/dist/signals',
 		history: 'libs/history/scripts/uncompressed/history',
 		router: 'mods/router/router',
-		events: 'mods/events/events'
+		events: 'mods/events/events',
+
+		// mixins
+		envMixin: 'mods/mixins/env/client'
 	},
 
 	shim: {

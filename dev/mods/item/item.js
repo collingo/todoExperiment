@@ -3,25 +3,26 @@ define([
 	'hbars!mods/item/item',
 	'events',
 	'underscore/objects/assign',
-	'baseView'
+	'envMixin'
 ],
 function(
 	dom,
 	template,
 	events,
 	_extend,
-	BaseView
+	envMixin
 ){
 
 	function ItemView(data) {
 		this.data = data;
 		this.el = dom('<li class="item"></li>');
 		this.render.call(this);
-		this.init.call(this);
 		return this.el;
 	}
-	ItemView.prototype = _extend({}, BaseView, {
+	ItemView.prototype = _extend({}, {
 		constructor: ItemView,
+
+		// events
 		bindEvents: function() {
 			this.el.find('.state').on('click', this.onToggle.bind(this));
 			this.el.on('click', this.onClick.bind(this));
@@ -31,7 +32,10 @@ function(
 		},
 		onToggle: function(e) {
 			e.stopPropagation();
+			this.toggle();
 		},
+
+		// methods
 		render: function() {
 			var viewdata = _extend({}, this.data, {
 				childCount: this.data.children.length ? this.data.children.length : ""
@@ -43,6 +47,8 @@ function(
 			this.render();
 		}
 	});
+
+	envMixin(ItemView);
 
 	return ItemView;
 

@@ -3,7 +3,7 @@ define([
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
-	'baseView',
+	'envMixin',
 	'mods/item/item',
 	'events'
 ],
@@ -12,7 +12,7 @@ function(
 	template,
 	_forEach,
 	_extend,
-	BaseView,
+	envMixin,
 	ItemView,
 	events
 ){
@@ -21,17 +21,25 @@ function(
 		this.data = data;
 		this.el = dom('<div class="listview"></div>');
 		this.render.call(this);
-		this.init.call(this);
 		return this.el;
 	}
-	ListView.prototype = _extend({}, BaseView, {
+	ListView.prototype = _extend({}, {
 		constructor: ListView,
+
+		// events
 		bindEvents: function() {
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
-		    this.el.find('.toolbar').on('touchmove', function(e) {
-				e.preventDefault();
-			});
+		    this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
 		},
+		onNav: function(e) {
+			e.preventDefault();
+			events.fire('go', this.data.parent.id);
+		},
+		onScrollToolbar: function(e) {
+			e.preventDefault();
+		},
+
+		// methods
 		render: function() {
 			var viewdata = _extend({}, this.data);
 			if(this.data.hasOwnProperty('parent')) {
@@ -47,12 +55,10 @@ function(
 		appendChild: function(childData) {
 			var item = new ItemView(_extend({}, childData));
 			this.list.append(item);
-		},
-		onNav: function(e) {
-			e.preventDefault();
-			events.fire('go', this.data.parent.id);
 		}
 	});
+
+	envMixin(ListView);
 
 	return ListView;
 
