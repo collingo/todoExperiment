@@ -3,6 +3,7 @@ define([
 	'underscore/collections/forEach',
 	'underscore/collections/where',
 	'dom',
+	'libs/fastclick/lib/fastclick',
 
 	'router',
 	'events'
@@ -11,10 +12,13 @@ define([
 	_forEach,
 	_where,
 	$,
+	FastClick,
 
 	router,
 	events
 ) {
+
+	FastClick.attach(document.body);
 
 	router.init(window.initId);
 

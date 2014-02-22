@@ -43,7 +43,11 @@ function(
 		},
 		toggle: function() {
 			this.data.done = !this.data.done;
-			this.render();
+			if(this.data.done) {
+				this.el.find('input').attr('checked', 'checked');
+			} else {
+				this.el.find('input').els[0].removeAttribute('checked');
+			}
 		}
 	});
 
