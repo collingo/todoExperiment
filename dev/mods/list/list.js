@@ -19,7 +19,6 @@ function(
 
 	function ListView(data) {
 		this.data = data;
-		this.el = dom('<div class="listview"></div>');
 		this.render.call(this);
 		return this.el;
 	}
@@ -45,7 +44,7 @@ function(
 			if(this.data.hasOwnProperty('parent')) {
 				viewdata.navButton = "Back";
 			}
-			this.el.html(template(viewdata));
+			this.el = dom(template(viewdata));
 			this.list = this.el.find('ul');
 			this.renderChildren.call(this);
 		},

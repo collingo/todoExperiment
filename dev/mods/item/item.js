@@ -15,7 +15,6 @@ function(
 
 	function ItemView(data) {
 		this.data = data;
-		this.el = dom('<li class="item"></li>');
 		this.render.call(this);
 		return this.el;
 	}
@@ -40,7 +39,7 @@ function(
 			var viewdata = _extend({}, this.data, {
 				childCount: this.data.children.length ? this.data.children.length : ""
 			});
-			this.el.html(template(viewdata));
+			this.el = dom(template(viewdata));
 		},
 		toggle: function() {
 			this.data.done = !this.data.done;
