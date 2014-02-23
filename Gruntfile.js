@@ -156,10 +156,8 @@ module.exports = function (grunt) {
 
 	// command line tasks
 	grunt.registerTask('default', ['css', 'jshint', 'server', 'watch']);
-	grunt.registerTask('test', 'Run the tests', function(moduleToTest) {
-		var allSpecs,
-			specSetup,
-			module = moduleToTest;
+	grunt.registerTask('test', 'Run the tests', function(module) {
+		var specSetup;
 		if (arguments.length > 0) {
 			grunt.config.set('jasmine.run.src', ['dev/mods/'+module+'/'+module+'.js']);
 			grunt.config.set('jasmine.run.options.specs', ['dev/mods/'+module+'/'+module+'-spec.js']);
