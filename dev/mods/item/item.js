@@ -2,20 +2,19 @@ define([
 	'dom',
 	'hbars!mods/item/item',
 	'events',
-	'underscore/objects/assign',
-	'envMixin'
+	'underscore/objects/assign'
 ],
 function(
 	dom,
 	template,
 	events,
-	_extend,
-	envMixin
+	_extend
 ){
 
 	function ItemView(data) {
 		this.data = data;
 		this.render.call(this);
+		this.el.els[0].bindEvents = this.bindEvents.bind(this);
 		return this.el;
 	}
 	ItemView.prototype = _extend({}, {
@@ -50,8 +49,6 @@ function(
 			}
 		}
 	});
-
-	envMixin(ItemView);
 
 	return ItemView;
 

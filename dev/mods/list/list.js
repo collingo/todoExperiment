@@ -3,7 +3,6 @@ define([
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
-	'envMixin',
 	'mods/item/item',
 	'events'
 ],
@@ -12,7 +11,6 @@ function(
 	template,
 	_forEach,
 	_extend,
-	envMixin,
 	ItemView,
 	events
 ){
@@ -20,6 +18,7 @@ function(
 	function ListView(data) {
 		this.data = data;
 		this.render.call(this);
+		this.el.els[0].bindEvents = this.bindEvents.bind(this);
 		return this.el;
 	}
 	ListView.prototype = _extend({}, {
@@ -54,8 +53,6 @@ function(
 			this.list.append(item);
 		}
 	});
-
-	envMixin(ListView);
 
 	return ListView;
 
