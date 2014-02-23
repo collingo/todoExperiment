@@ -127,7 +127,6 @@ module.exports = function (grunt) {
 					skipDirOptimize: true,
 					optimizeCss: false,
 					wrap: true,
-					// dir: 'www',
 					normalizeDirDefines: 'all',
 					stubModules: ['text', 'hbars'],
 					removeCombined: true
