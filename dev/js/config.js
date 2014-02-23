@@ -16,7 +16,8 @@ var config = {
 		events: 'mods/events/events',
 
 		// mixins
-		envMixin: 'mods/mixins/env/client'
+		envMixin: 'mods/mixins/env/client',
+		dispatch: 'mods/dispatch/client'
 	},
 
 	shim: {

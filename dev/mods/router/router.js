@@ -6,7 +6,8 @@ define([
 	'mods/list/list',
 	'routes/list/controller',
 	'mods/data/data',
-	'events'
+	'events',
+	'dispatch'
 ], function(
 	_clone,
 	_forEach,
@@ -15,7 +16,8 @@ define([
 	ListView,
 	listController,
 	data,
-	events
+	events,
+	dispatch
 ) {
 
 	function Router() {
@@ -59,13 +61,7 @@ define([
 		},
 		processView: function(location) {
 			var view = listController.render(parseInt(location, 10) || 0);
-
-			$('body')
-				.empty()
-				.append(
-					// new ListView(viewdata)
-					view//.els[0].outerHTML
-				);
+			dispatch(view);
 		}
 	};
 
