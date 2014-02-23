@@ -4,6 +4,7 @@ define([
 	'dom',
 
 	'mods/list/list',
+	'routes/list/controller',
 	'mods/data/data',
 	'events'
 ], function(
@@ -12,6 +13,7 @@ define([
 	$,
 
 	ListView,
+	listController,
 	data,
 	events
 ) {
@@ -23,6 +25,16 @@ define([
 	}
 	Router.prototype = {
 		constructor: Router,
+
+		// handlers
+		onPop: function(e) {
+			events.fire('go', e.state.url, true);
+		},
+		onGo: function(to, isPop) {
+			this.go(to, isPop);
+		},
+
+		// methods
 		init: function(id) {
 			this.replace(id);
 			this.processView(id);
@@ -39,27 +51,6 @@ define([
 				url: to
 			}, to, to);
 		},
-		buildViewObject: function(id) {
-			var obj = _clone(data.get(id));
-			if(obj.children.length) {
-				var children = [];
-				_forEach(obj.children, function(id) {
-					children.push(_clone(data.get(id)));
-				});
-				obj.children = children;
-			}
-			if(obj.parent) {
-				var parentChildren = [];
-				obj.parent = data.get(obj.parent);
-			}
-			return obj;
-		},
-		onPop: function(e) {
-			events.fire('go', e.state.url, true);
-		},
-		onGo: function(to, isPop) {
-			this.go(to, isPop);
-		},
 		go: function(to, isPop) {
 			if(!isPop) {
 				this.push(to);
@@ -67,12 +58,13 @@ define([
 			this.processView(to);
 		},
 		processView: function(location) {
-			var viewdata = this.buildViewObject(parseInt(location, 10) || 0);
+			var view = listController.render(parseInt(location, 10) || 0);
 
 			$('body')
 				.empty()
 				.append(
-					new ListView(viewdata)
+					// new ListView(viewdata)
+					view//.els[0].outerHTML
 				);
 		}
 	};

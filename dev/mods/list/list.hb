@@ -1,7 +1,7 @@
 <div class="listview">
 	<div class="toolbar">
 		<h1>{{text}}</h1>
-		{{#if navButton}}<div class="navButton">{{navButton}}</div>{{/if}}
+		{{#if hasParent}}<div class="navButton">Back</div>{{/if}}
 		{{#if contextButton}}<div class="contextButton">{{contextButton}}</div>{{/if}}
 	</div>
 	<div class="wrapper">

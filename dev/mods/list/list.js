@@ -41,9 +41,7 @@ function(
 		// methods
 		render: function() {
 			var viewdata = _extend({}, this.data);
-			if(this.data.hasOwnProperty('parent')) {
-				viewdata.navButton = "Back";
-			}
+			viewdata.hasParent = this.data.hasOwnProperty('parent');
 			this.el = dom(template(viewdata));
 			this.list = this.el.find('ul');
 			this.renderChildren.call(this);
