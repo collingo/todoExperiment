@@ -6,8 +6,6 @@ define([
 	_each
 ) {
 	return function(view) {
-
 		return view.els[0].outerHTML;
-		
 	};
 });
