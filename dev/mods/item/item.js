@@ -43,9 +43,9 @@ function(
 		toggle: function() {
 			this.data.done = !this.data.done;
 			if(this.data.done) {
-				this.el.find('input').attr('checked', 'checked');
+				this.el.find('input').els[0].checked = true;
 			} else {
-				this.el.find('input').els[0].removeAttribute('checked');
+				this.el.find('input').els[0].checked = false;
 			}
 		}
 	});

@@ -5,6 +5,7 @@ li.item {
 	height: 3em;
 	box-sizing: border-box;
 	position:relative;
+	cursor:pointer;
 	
 	.state,
 	.children {
@@ -18,6 +19,10 @@ li.item {
 	}
 	.state {
 		left: 0;
+
+		input {
+			cursor: pointer;
+		}
 	}
 	.children {
 		right: 0;
