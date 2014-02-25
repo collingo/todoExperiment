@@ -6,6 +6,11 @@ li.item {
 	box-sizing: border-box;
 	position:relative;
 	cursor:pointer;
+	-webkit-user-select: text; /* Chrome/Safari */
+	-moz-user-select: text; /* Firefox */
+	-ms-user-select: text; /* IE10+ */
+	-o-user-select: text;
+	user-select: text;
 	
 	.state,
 	.children {
@@ -16,6 +21,11 @@ li.item {
 		display: inline-block;
 		width: 3em;
 		height: 3em;
+		-webkit-user-select: none; /* Chrome/Safari */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* IE10+ */
+		-o-user-select: none;
+		user-select: none;
 	}
 	.state {
 		left: 0;
