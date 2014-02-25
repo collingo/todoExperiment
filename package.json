@@ -28,7 +28,7 @@
   },
   "subdomain": "collingo-todo",
   "scripts": {
-    "predeploy": "npm install; node_modules/bower/bin/bower install; node_modules/grunt-cli/bin/grunt build;",
+    "predeploy": "node_modules/grunt-cli/bin/grunt build;",
     "start": "node server.js"
   },
   "engines": {

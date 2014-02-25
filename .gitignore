@@ -9,10 +9,6 @@ package
 .grunt
 _SpecRunner.html
 
-# package mananger caches
-node_modules
-dev/libs/*
-
 # compiled styles
 dev/css/*.css*
 

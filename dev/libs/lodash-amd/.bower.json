@@ -1,0 +1,14 @@
+{
+  "name": "lodash-amd",
+  "homepage": "https://github.com/lodash/lodash-amd",
+  "version": "2.3.0",
+  "_release": "2.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.3.0",
+    "commit": "3bb24c2acadf52aad7005983316a9f0fdb1c8687"
+  },
+  "_source": "git://github.com/lodash/lodash-amd.git",
+  "_target": "~2.3.0",
+  "_originalSource": "lodash-amd"
+}
