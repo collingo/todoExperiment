@@ -4,7 +4,7 @@ var express = require('express'),
     builtDir = path.resolve(__dirname + '/../www'),
     devDir = path.resolve(__dirname + '/../client');
 
-function setupServer(name, port, directory) {
+function setupServer(name, port, directory, dev) {
 	var server = express().use(express.static(directory));
 	server.engine('hbs', exphbs({extname: '.hbs'}));
 	server.set('view engine', 'hbs');
@@ -12,13 +12,13 @@ function setupServer(name, port, directory) {
 	server.get('/', function(req, res) {
 		res.render('index', {
 			id: 0,
-			dev: port === 8081
+			dev: dev
 		});
 	});
 	server.get('/:id', function(req, res) {
 		res.render('index', {
 			id: req.params.id,
-			dev: port === 8081
+			dev: dev
 		});
 	});
 	server.listen(port);
@@ -26,9 +26,9 @@ function setupServer(name, port, directory) {
 	return server;
 }
 
-var built = setupServer("Built", 8080, builtDir);
+var built = setupServer("Built", 8080, builtDir, false);
 
 // serve development code when not in production
 if(!process.env.SUBDOMAIN) {
-	var dev = setupServer("Local", 8081, devDir);
+	var dev = setupServer("Local", 8081, devDir, true);
 }
