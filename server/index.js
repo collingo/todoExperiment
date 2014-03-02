@@ -1,13 +1,14 @@
 var express = require('express'),
     exphbs = require('express3-handlebars'),
-    builtDir = 'www',
-    devDir = 'dev';
+    path = require('path'),
+    builtDir = path.resolve(__dirname + '/../www'),
+    devDir = path.resolve(__dirname + '/../client');
 
 function setupServer(name, port, directory) {
 	var server = express().use(express.static(directory));
 	server.engine('hbs', exphbs({extname: '.hbs'}));
 	server.set('view engine', 'hbs');
-	server.set('views', __dirname + '/' + directory);
+	server.set('views', path.resolve(__dirname + '/views'));
 	server.get('/', function(req, res) {
 		res.render('index', {
 			id: 0

@@ -1,18 +1,22 @@
 /*global module: true */
-var customJsGlob = [
+var clientDir = './client/',
+	customJsGlob = [
 		'./*.js',
-		'./dev/js/**/*.js',
-		'./dev/mods/**/*.js'
+		clientDir+'js/**/*.js',
+		clientDir+'mods/**/*.js'
 	],
 	customCssGlob = [
-		'./dev/css/**/*.{less,styl,scss,sass}',
-		'./dev/mods/**/*.{less,styl,scss,sass}'
+		clientDir+'css/**/*.{less,styl,scss,sass}',
+		clientDir+'mods/**/*.{less,styl,scss,sass}'
 	],
-	requireConfig = require('./dev/js/config'),
+	requireConfig = require(clientDir+'js/config'),
 	_ = require('underscore');
 
 
 module.exports = function (grunt) {
+
+	var lessFiles = {};
+	lessFiles[clientDir+'css/style.css'] = clientDir+'css/style.less';
 
 	//Config
 	grunt.initConfig({
@@ -33,13 +37,11 @@ module.exports = function (grunt) {
 				options: {
 					compress: true,
 					sourceMap: true,
-					sourceMapFilename: 'dev/css/style.css.map',
-					sourceMapBasepath: 'dev/',
+					sourceMapFilename: clientDir+'css/style.css.map',
+					sourceMapBasepath: clientDir,
 					sourceMapRootpath: '../'
 				},
-				files: {
-					'dev/css/style.css': 'dev/css/style.less'
-				}
+				files: lessFiles
 			}
 		},
 
@@ -52,13 +54,13 @@ module.exports = function (grunt) {
 
 		jasmine: {
 			run: {
-				src: ['dev/mods/*/*.js', '!dev/mods/*/*spec.js'],
+				src: [clientDir+'mods/*/*.js', '!'+clientDir+'mods/*/*spec.js'],
 				options: {
-					specs: 'dev/mods/*/*spec.js',
+					specs: clientDir+'mods/*/*spec.js',
 					template: require('grunt-template-jasmine-requirejs'),
 					templateOptions: {
 						requireConfig: _.extend({}, requireConfig, {
-							baseUrl: 'dev/'
+							baseUrl: clientDir
 						})
 					}
 				}
@@ -94,7 +96,7 @@ module.exports = function (grunt) {
 			www: {
 				files: [{
 					expand: true,
-					cwd: 'dev/',
+					cwd: clientDir,
 					src: ['**'],
 					dest: 'www/'
 				}]
@@ -150,7 +152,7 @@ module.exports = function (grunt) {
 	// helper tasks (do not call from command line)
 	grunt.registerTask('css', ['less']);
 	grunt.registerTask('server', 'Start a custom web server', function() {
-		require('./server.js');
+		require('./server/index.js');
 	});
 
 	// command line tasks
@@ -158,8 +160,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('test', 'Run the tests', function(module) {
 		var specSetup;
 		if (arguments.length > 0) {
-			grunt.config.set('jasmine.run.src', ['dev/mods/'+module+'/'+module+'.js']);
-			grunt.config.set('jasmine.run.options.specs', ['dev/mods/'+module+'/'+module+'-spec.js']);
+			grunt.config.set('jasmine.run.src', [clientDir+'mods/'+module+'/'+module+'.js']);
+			grunt.config.set('jasmine.run.options.specs', [clientDir+'mods/'+module+'/'+module+'-spec.js']);
 			grunt.log.writeln("Testing " + module);
 		} else {
 			grunt.log.writeln('Running all tests');
@@ -168,9 +170,9 @@ module.exports = function (grunt) {
 			_.each(grunt.file.expand(grunt.config.get('jasmine.run.options.specs')), function(path) {
 				var module = path.split('/')[2];
 				newSetup[module] = _.extend({}, specSetup);
-				newSetup[module].src = ['dev/mods/'+module+'/'+module+'.js'];
+				newSetup[module].src = [clientDir+'mods/'+module+'/'+module+'.js'];
 				newSetup[module].options = _.extend({}, specSetup.options);
-				newSetup[module].options.specs = ['dev/mods/'+module+'/'+module+'-spec.js'];
+				newSetup[module].options.specs = [clientDir+'mods/'+module+'/'+module+'-spec.js'];
 			});
 			grunt.config.set('jasmine', newSetup);
 		}
