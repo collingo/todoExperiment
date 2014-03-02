@@ -1,22 +1,23 @@
 /*global module: true */
-var clientDir = './client/',
+var clientDir = 'client/',
+	clientDirRelative = './'+clientDir,
 	customJsGlob = [
 		'./*.js',
-		clientDir+'js/**/*.js',
-		clientDir+'mods/**/*.js'
+		clientDirRelative+'js/**/*.js',
+		clientDirRelative+'mods/**/*.js'
 	],
 	customCssGlob = [
-		clientDir+'css/**/*.{less,styl,scss,sass}',
-		clientDir+'mods/**/*.{less,styl,scss,sass}'
+		clientDirRelative+'css/**/*.{less,styl,scss,sass}',
+		clientDirRelative+'mods/**/*.{less,styl,scss,sass}'
 	],
-	requireConfig = require(clientDir+'js/config'),
+	requireConfig = require(clientDirRelative+'js/config'),
 	_ = require('underscore');
 
 
 module.exports = function (grunt) {
 
 	var lessFiles = {};
-	lessFiles[clientDir+'css/style.css'] = clientDir+'css/style.less';
+	lessFiles[clientDirRelative+'css/style.css'] = clientDirRelative+'css/style.less';
 
 	//Config
 	grunt.initConfig({
@@ -37,8 +38,8 @@ module.exports = function (grunt) {
 				options: {
 					compress: true,
 					sourceMap: true,
-					sourceMapFilename: clientDir+'css/style.css.map',
-					sourceMapBasepath: clientDir,
+					sourceMapFilename: clientDirRelative+'css/style.css.map',
+					sourceMapBasepath: clientDirRelative,
 					sourceMapRootpath: '../'
 				},
 				files: lessFiles
@@ -96,7 +97,7 @@ module.exports = function (grunt) {
 			www: {
 				files: [{
 					expand: true,
-					cwd: clientDir,
+					cwd: clientDirRelative,
 					src: ['**'],
 					dest: 'www/'
 				}]
