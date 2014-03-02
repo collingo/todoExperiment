@@ -104,13 +104,17 @@ module.exports = function (grunt) {
 			}
 		},
 
-		processhtml: {
-			options: {
-				// Task-specific options go here.
-			},
-			build: {
-				files: {
-					'www/index.hbs': ['www/index.hbs']
+		nodemon: {
+			dev: {
+				script: 'server/index.js'
+			}
+		},
+
+		concurrent: {
+			dev: {
+				tasks: ['server', 'watch'],
+				options: {
+					logConcurrentOutput: true
 				}
 			}
 		},
@@ -149,15 +153,20 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jasmine');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-processhtml');
+	grunt.loadNpmTasks('grunt-nodemon');
+	grunt.loadNpmTasks('grunt-concurrent');
 
 	// helper tasks (do not call from command line)
 	grunt.registerTask('css', ['less']);
 	grunt.registerTask('server', 'Start a custom web server', function() {
-		require('./server/index.js');
+		grunt.task.run('nodemon');
+	});
+	grunt.registerTask('setupDevEnv', 'Setting up development environment', function() {
+		grunt.task.run('concurrent:dev');
 	});
 
 	// command line tasks
-	grunt.registerTask('default', ['css', 'jshint', 'server', 'watch']);
+	grunt.registerTask('default', ['css', 'jshint', 'setupDevEnv']);
 	grunt.registerTask('test', 'Run the tests', function(module) {
 		var specSetup;
 		if (arguments.length > 0) {

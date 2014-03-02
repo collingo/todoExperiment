@@ -12,8 +12,10 @@
 	<script>
 		var initId = {{id}} || 0;
 	</script>
-	<!-- build:js js/init.js -->
+	{{#if dev}}
 	<script src="libs/requirejs/require.js" data-main="js/config.js"></script>
-	<!-- /build -->
+	{{else}}
+	<script src="js/init.js"></script>
+	{{/if}}
 </body>
 </html>

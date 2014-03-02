@@ -16,9 +16,10 @@
     "underscore": "~1.5.2",
     "bower": "~1.2.8",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-processhtml": "~0.3.0",
     "grunt-template-jasmine-requirejs": "git://github.com/collingo/grunt-template-jasmine-requirejs",
-    "grunt-contrib-less": "~0.9.0"
+    "grunt-contrib-less": "~0.9.0",
+    "grunt-nodemon": "~0.2.0",
+    "grunt-concurrent": "~0.4.3"
   },
   "dependencies": {
     "connect": "2.3.x",
@@ -29,7 +30,7 @@
   "subdomain": "collingo-todo",
   "scripts": {
     "predeploy": "node_modules/grunt-cli/bin/grunt build;",
-    "start": "node server.js"
+    "start": "node server/index.js"
   },
   "engines": {
     "node": "0.10.x"

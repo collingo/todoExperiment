@@ -11,12 +11,14 @@ function setupServer(name, port, directory) {
 	server.set('views', path.resolve(__dirname + '/views'));
 	server.get('/', function(req, res) {
 		res.render('index', {
-			id: 0
+			id: 0,
+			dev: port === 8081
 		});
 	});
 	server.get('/:id', function(req, res) {
 		res.render('index', {
-			id: req.params.id
+			id: req.params.id,
+			dev: port === 8081
 		});
 	});
 	server.listen(port);
