@@ -30,5 +30,5 @@ var built = setupServer("Built", 8080, builtDir, false);
 
 // serve development code when not in production
 if(!process.env.SUBDOMAIN) {
-	var dev = setupServer("Local", 8081, devDir, true);
+	var dev = setupServer("Development", 8081, devDir, true);
 }
