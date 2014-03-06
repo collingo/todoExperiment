@@ -6,7 +6,9 @@
 	</div>
 	<div class="wrapper">
 		<div class="innerwrapper">
-			<ul class="list"></ul>
+			<div class="scrollwrapper">
+				<ul class="list"></ul>
+			</div>
 		</div>
 	</div>
 </div>
