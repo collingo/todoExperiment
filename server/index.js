@@ -22,14 +22,16 @@ function setupServer(name, port, directory, prod, built) {
 		res.render('index', {
 			id: 0,
 			built: built,
-			rev: rev
+			rev: rev,
+			data: JSON.stringify(require('./data.json'))
 		});
 	});
 	server.get('/:id', function(req, res) {
 		res.render('index', {
 			id: req.params.id,
 			built: built,
-			rev: rev
+			rev: rev,
+			data: JSON.stringify(require('./data.json'))
 		});
 	});
 	server.listen(port);
