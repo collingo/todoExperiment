@@ -4,7 +4,7 @@ define([
 	_where
 ) {
 
-	var storage = {
+	var storage = window.storage = {
 		load: function(dataToLoad) {
 			data = window.data = dataToLoad;
 		},
@@ -12,6 +12,9 @@ define([
 			return _where(data, {
 				id: id
 			})[0];
+		},
+		set: function(dataToStore) {
+			data[dataToStore.id] = dataToStore;
 		}
 	};
 
