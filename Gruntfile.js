@@ -128,7 +128,7 @@ module.exports = function (grunt) {
 					almond: true,
 					name: 'libs/almond/almond',
 					include: ['js/init.js'],
-					out: "www/js/init.js",
+					out: "www/js/script.js",
 					mainConfigFile: "www/js/config.js",
 					optimize: 'uglify2',
 					generateSourceMaps: true,
