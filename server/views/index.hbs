@@ -5,17 +5,17 @@
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	<title>Think.Do.</title>
+	<title>Think.Do.{{#if rev}} - {{rev}}{{/if}}</title>
 	<link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 	<script>
 		var initId = {{id}} || 0;
 	</script>
-	{{#if dev}}
-	<script src="libs/requirejs/require.js" data-main="js/config.js"></script>
-	{{else}}
+	{{#if built}}
 	<script src="js/init.js"></script>
+	{{else}}
+	<script src="libs/requirejs/require.js" data-main="js/config.js"></script>
 	{{/if}}
 </body>
 </html>
