@@ -1,11 +1,24 @@
 var express = require('express'),
     exphbs = require('express3-handlebars'),
     path = require('path'),
+    gitrev = require('git-rev'),
     builtDir = path.resolve(__dirname + '/../www'),
-    devDir = path.resolve(__dirname + '/../client');
+    devDir = path.resolve(__dirname + '/../client'),
+    rev = false;
 
-function setupServer(name, port, directory, rev, built) {
-	var server = express().use(express.static(directory));
+function setupServer(name, port, directory, prod, built) {
+	var server = express();
+	server.use(express.static(directory));
+	server.use(function(req, res, next) {
+		if(prod) {
+			next();
+		} else {
+			gitrev.short(function(currentRev) {
+				rev = currentRev;
+				next();
+			});
+		}
+	});
 	server.engine('hbs', exphbs({extname: '.hbs'}));
 	server.set('view engine', 'hbs');
 	server.set('views', path.resolve(__dirname + '/views'));
@@ -28,18 +41,11 @@ function setupServer(name, port, directory, rev, built) {
 	return server;
 }
 
-function startServers(rev) {
-	var built = setupServer("Built", 8080, builtDir, rev, true);
+(function startServers(prod) {
+	var built = setupServer("Built", 8080, builtDir, prod, true);
 
 	// serve development code when not in production
-	if(rev) {
-		var dev = setupServer("Development", 8081, devDir, rev, false);
+	if(!prod) {
+		var dev = setupServer("Development", 8081, devDir, prod, false);
 	}
-}
-
-if(process.env.SUBDOMAIN) {
-	startServers();
-} else {
-	var gitrev = require('git-rev');
-	gitrev.short(startServers);
-}
+}(!!process.env.SUBDOMAIN));
