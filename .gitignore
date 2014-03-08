@@ -10,7 +10,7 @@ package
 _SpecRunner.html
 
 # compiled styles
-dev/css/*.css*
+client/css/*.css*
 
 # distribution code
 www
