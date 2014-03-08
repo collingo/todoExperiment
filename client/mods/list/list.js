@@ -40,7 +40,6 @@ function(
 		onKeyPress: function(e) {
 			if(e.keyCode === 13) {
 				e.preventDefault();
-				console.log(this.input.val());
 				this.addNew(this.input.val());
 			}
 		},
@@ -59,10 +58,21 @@ function(
 		},
 		addNew: function(text) {
 			document.querySelector('input').value = '';
-			this.appendChild({
-				id: data.length,
+			var id = data.length;
+			data.push({
+				id: id,
 				text: text,
-				children: []
+				done: false,
+				children: [],
+				parent: this.data.id
+			});
+			data[this.data.id].children.push(id);
+			this.appendChild({
+				id: id,
+				text: text,
+				done: false,
+				children: [],
+				parent: this.data.id
 			});
 			events.fire('stitch');
 		},
