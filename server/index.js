@@ -10,14 +10,10 @@ function setupServer(name, port, directory, prod, built) {
 	var server = express();
 	server.use(express.static(directory));
 	server.use(function(req, res, next) {
-		if(prod) {
+		gitrev.short(function(currentRev) {
+			rev = currentRev;
 			next();
-		} else {
-			gitrev.short(function(currentRev) {
-				rev = currentRev;
-				next();
-			});
-		}
+		});
 	});
 	server.engine('hbs', exphbs({extname: '.hbs'}));
 	server.set('view engine', 'hbs');
