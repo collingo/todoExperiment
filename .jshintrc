@@ -28,6 +28,7 @@
 		"Handlebars": true,
 		"describe": true,
 		"it": true,
-		"expect": true
+		"expect": true,
+		"data": true
 	}
 }
