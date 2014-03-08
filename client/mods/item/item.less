@@ -1,6 +1,6 @@
 li.item {
 	list-style: none;
-	padding: 1em 1em 1em calc(50px + 1em);
+	padding: 1em;
 	margin: 0;
 	height: 3em;
 	box-sizing: border-box;
@@ -16,26 +16,22 @@ li.item {
 	.children {
 		position: absolute;
 		top: 0;
+		right: 0;
 		box-sizing: border-box;
 		padding: 1em;
 		display: inline-block;
 		width: 3em;
 		height: 3em;
+		text-align: center;
 		-webkit-user-select: none; /* Chrome/Safari */
 		-moz-user-select: none; /* Firefox */
 		-ms-user-select: none; /* IE10+ */
 		-o-user-select: none;
 		user-select: none;
-	}
-	.state {
-		left: 0;
 
 		input {
 			cursor: pointer;
 		}
-	}
-	.children {
-		right: 0;
 	}
 
 	&:nth-child(odd) {

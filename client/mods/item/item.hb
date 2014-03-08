@@ -1,7 +1,10 @@
 <li class="item dirty">
-	<div class="state">
-		<input type="checkbox"{{#if done}} checked="checked"{{/if}} />
-	</div>
+	{{#if childCount}}
+		<div class="children">{{childCount}}</div>
+	{{else}}
+		<div class="state">
+			<input type="checkbox"{{#if done}} checked="checked"{{/if}} />
+		</div>
+	{{/if}}
 	<div class="text">{{text}}</div>
-	{{#if childCount}}<div class="children">{{childCount}}</div>{{/if}}
 </li>
