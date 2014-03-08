@@ -6,7 +6,7 @@ var express = require('express'),
     devDir = path.resolve(__dirname + '/../client'),
     rev = false;
 
-function setupServer(name, port, directory, prod, built) {
+function setupServer(name, port, directory, built) {
 	var server = express();
 	server.use(express.static(directory));
 	server.use(function(req, res, next) {
@@ -45,10 +45,10 @@ function setupServer(name, port, directory, prod, built) {
 }
 
 (function startServers(prod) {
-	var built = setupServer("Built", 8080, builtDir, prod, true);
+	var built = setupServer("Built", 8080, builtDir, true);
 
 	// serve development code when not in production
 	if(!prod) {
-		var dev = setupServer("Development", 8081, devDir, prod, false);
+		var dev = setupServer("Development", 8081, devDir, false);
 	}
 }(!!process.env.SUBDOMAIN));
