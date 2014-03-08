@@ -5,7 +5,7 @@ define([
 
 	'mods/list/list',
 	'hbars!mods/list/list',
-	'mods/data/data',
+	'mods/storage/storage',
 	'events',
 	'dom'
 ], function(
@@ -15,7 +15,7 @@ define([
 
 	ListView,
 	template,
-	data,
+	storage,
 	events,
 	dom
 ) {
@@ -29,11 +29,11 @@ define([
 		  return element.els[0].outerHTML;
 		},
 		buildViewObject: function(id) {
-			var obj = _clone(data.get(id));
+			var obj = _clone(storage.get(id));
 			if(obj.children.length) {
 				var children = [];
 				_forEach(obj.children, function(id) {
-					var child = _clone(data.get(id));
+					var child = _clone(storage.get(id));
 					children.push(_extend(child, {
 						childCount: child.children.length
 					}));
@@ -42,7 +42,7 @@ define([
 			}
 			if(obj.parent) {
 				var parentChildren = [];
-				obj.parent = data.get(obj.parent);
+				obj.parent = storage.get(obj.parent);
 			}
 			obj.hasParent = obj.hasOwnProperty('parent');
 			return obj;

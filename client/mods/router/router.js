@@ -5,7 +5,6 @@ define([
 
 	'mods/list/list',
 	'routes/list/controller',
-	'mods/data/data',
 	'events',
 	'dispatch'
 ], function(
@@ -15,7 +14,6 @@ define([
 
 	ListView,
 	listController,
-	data,
 	events,
 	dispatch
 ) {

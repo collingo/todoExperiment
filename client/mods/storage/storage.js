@@ -4,7 +4,7 @@ define([
 	_where
 ) {
 
-	var storage = window.storage = [{
+	var data = window.data = [{
 		"id": 0,
 		"text": "Think.Do.",
 		"children": [1,2,3,4,8,9,10,11,12,13,14,15]
@@ -100,14 +100,17 @@ define([
 		"parent": 0
 	}];
 
-	var data = {
+	var storage = {
+		load: function(dataToLoad) {
+			data = window.data = dataToLoad;
+		},
 		get: function(id) {
-			return _where(storage, {
+			return _where(data, {
 				id: id
 			})[0];
 		}
 	};
 
-	return data;
+	return storage;
 
 });
