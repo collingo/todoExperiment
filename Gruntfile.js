@@ -11,7 +11,9 @@ var clientDir = 'client/',
 		clientDirRelative+'mods/**/*.{less,styl,scss,sass}'
 	],
 	requireConfig = require(clientDirRelative+'js/config'),
-	_ = require('underscore');
+	_ = require('underscore'),
+    gitrev = require('git-rev'),
+    fs = require('fs');
 
 
 module.exports = function (grunt) {
@@ -163,6 +165,19 @@ module.exports = function (grunt) {
 	grunt.registerTask('setupDevEnv', 'Setting up development environment', function() {
 		grunt.task.run('concurrent:dev');
 	});
+	grunt.registerTask('cacheRev', 'Cache revision number of front end codebase', function() {
+		var done = this.async();
+		gitrev.short(function(currentRev) {
+			fs.writeFile('./www/build.json', JSON.stringify({
+				revision: currentRev
+			}), 'utf8', function (err) {
+				if (err) {
+					return console.log(err);
+				}
+				done();
+			});
+		});
+	});
 
 	// command line tasks
 	grunt.registerTask('default', ['css', 'jshint', 'setupDevEnv']);
@@ -187,6 +202,6 @@ module.exports = function (grunt) {
 		}
 		grunt.task.run('jasmine');
 	});
-	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'copy', 'requirejs', 'clean:built', 'uglify']);
+	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'copy', 'requirejs', 'clean:built', 'uglify', 'cacheRev']);
 
 };
