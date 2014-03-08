@@ -1,7 +1,6 @@
 var express = require('express'),
     exphbs = require('express3-handlebars'),
     path = require('path'),
-    gitrev = require('git-rev'),
     builtDir = path.resolve(__dirname + '/../www'),
     devDir = path.resolve(__dirname + '/../client');
 
@@ -41,5 +40,6 @@ function startServers(rev) {
 if(process.env.SUBDOMAIN) {
 	startServers();
 } else {
+	var gitrev = require('git-rev');
 	gitrev.short(startServers);
 }
