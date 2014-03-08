@@ -5,7 +5,8 @@ define([
 ) {
 
 	var events = {
-		go : new signals.Signal()
+		go : new signals.Signal(),
+		stitch : new signals.Signal()
 	};
 
 	return {

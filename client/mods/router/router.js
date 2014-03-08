@@ -18,6 +18,14 @@ define([
 	dispatch
 ) {
 
+	events.on('stitch', function() {
+		$('.dirty').forEach(function(item) {
+			$(item)
+				.removeClass('dirty')
+				.els[0].bindEvents();
+		});
+	});
+
 	function Router() {
 		window.onpopstate = this.onPop.bind(this);
 		this.onGo = this.onGo.bind(this);
@@ -60,6 +68,7 @@ define([
 		processView: function(location) {
 			var view = listController.render(parseInt(location, 10) || 0);
 			dispatch(view);
+			events.fire('stitch');
 		}
 	};
 

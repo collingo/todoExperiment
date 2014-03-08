@@ -27,7 +27,8 @@ function(
 		// events
 		bindEvents: function() {
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
-		    this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
+			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
+			this.input.on('keypress', this.onKeyPress.bind(this));
 		},
 		onNav: function(e) {
 			e.preventDefault();
@@ -36,6 +37,13 @@ function(
 		onScrollToolbar: function(e) {
 			e.preventDefault();
 		},
+		onKeyPress: function(e) {
+			if(e.keyCode === 13) {
+				e.preventDefault();
+				console.log(this.input.val());
+				this.addNew(this.input.val());
+			}
+		},
 
 		// methods
 		render: function() {
@@ -43,10 +51,20 @@ function(
 			viewdata.hasParent = this.data.hasOwnProperty('parent');
 			this.el = dom(template(viewdata));
 			this.list = this.el.find('ul');
+			this.input = this.el.find('input');
 			this.renderChildren.call(this);
 		},
 		renderChildren: function() {
 			_forEach(this.data.children, this.appendChild.bind(this));
+		},
+		addNew: function(text) {
+			document.querySelector('input').value = '';
+			this.appendChild({
+				id: data.length,
+				text: text,
+				children: []
+			});
+			events.fire('stitch');
 		},
 		appendChild: function(childData) {
 			var item = new ItemView(_extend({}, childData));

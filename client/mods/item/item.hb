@@ -1,4 +1,4 @@
-<li class="item">
+<li class="item dirty">
 	<div class="state">
 		<input type="checkbox"{{#if done}} checked="checked"{{/if}} />
 	</div>

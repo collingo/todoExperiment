@@ -26,6 +26,7 @@ function(
 			this.el.on('click', this.onClick.bind(this));
 		},
 		onClick: function() {
+			alert(this.data.id);
 			events.fire('go', this.data.id);
 		},
 		onToggle: function(e) {
