@@ -27,12 +27,21 @@ function(
 		// events
 		bindEvents: function() {
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
+			this.el.find('.thinkDoToggle').on('click', this.onToggleState.bind(this));
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
 			this.input.on('keypress', this.onKeyPress.bind(this));
+			events.on('changeState', this.onChangeState.bind(this));
 		},
 		onNav: function(e) {
 			e.preventDefault();
 			events.fire('go', this.data.parent.id);
+		},
+		onToggleState: function(e) {
+			e.preventDefault();
+			events.fire('toggleState');
+		},
+		onChangeState: function(state) {
+			this.el.find('.thinkDoToggle').text(["Think", "Do"][state]);
 		},
 		onScrollToolbar: function(e) {
 			e.preventDefault();

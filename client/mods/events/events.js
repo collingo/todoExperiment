@@ -6,7 +6,9 @@ define([
 
 	var events = {
 		go : new signals.Signal(),
-		stitch : new signals.Signal()
+		stitch : new signals.Signal(),
+		toggleState : new signals.Signal(),
+		changeState : new signals.Signal()
 	};
 
 	return {

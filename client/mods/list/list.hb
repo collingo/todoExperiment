@@ -2,7 +2,7 @@
 	<div class="toolbar">
 		<h1>{{text}}</h1>
 		{{#if hasParent}}<div class="navButton">Up</div>{{/if}}
-		{{#if contextButton}}<div class="contextButton">{{contextButton}}</div>{{/if}}
+		<div class="thinkDoToggle">Do</div>
 	</div>
 	<div class="wrapper">
 		<div class="innerwrapper">

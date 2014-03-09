@@ -1,9 +1,11 @@
 define([
 	'libs/fastclick/lib/fastclick',
-	'router'
+	'router',
+	'mods/app/app'
 ], function(
 	FastClick,
-	router
+	router,
+	app
 ) {
 
 	FastClick.attach(document.body);
