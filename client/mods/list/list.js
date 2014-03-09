@@ -92,7 +92,6 @@ function(
 			events.fire('stitch');
 		},
 		addChild: function(childData, prepend) {
-			console.log(arguments, prepend);
 			var item = new ItemView(_extend({}, childData));
 			if(prepend) {
 				this.list.prepend(item);

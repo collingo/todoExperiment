@@ -2,19 +2,24 @@ define([
 	'dom',
 	'hbars!mods/item/item',
 	'events',
-	'underscore/objects/assign'
+	'underscore/objects/assign',
+	'underscore/functions/bindAll',
+	'mods/app/app'
 ],
 function(
 	dom,
 	template,
 	events,
-	_extend
+	_extend,
+	_bindAll,
+	app
 ){
 
 	function ItemView(data) {
 		this.data = data;
 		this.render.call(this);
-		this.el.els[0].bindEvents = this.bindEvents.bind(this);
+		_bindAll(this, 'bindEvents', 'onToggle', 'onChangeState', 'onClick');
+		this.el.els[0].bindEvents = this.bindEvents;
 		return this.el;
 	}
 	ItemView.prototype = _extend({}, {
@@ -22,8 +27,19 @@ function(
 
 		// events
 		bindEvents: function() {
-			this.el.find('.state').on('click', this.onToggle.bind(this));
-			this.el.on('click', this.onClick.bind(this));
+			this.el.find('.state').on('click', this.onToggle);
+			events.on('changeState', this.onChangeState);
+			this.bindChildNav();
+		},
+		bindChildNav: function() {
+			if(!app.state || this.data.children.length) {
+				this.el.on('click', this.onClick);
+			} else {
+				this.el.off('click', this.onClick);
+			}
+		},
+		onChangeState: function() {
+			this.bindChildNav();
 		},
 		onClick: function() {
 			events.fire('go', this.data.id);
