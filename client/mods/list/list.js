@@ -57,6 +57,7 @@ function(
 
 		// methods
 		render: function() {
+			console.log(this.data);
 			var viewdata = _extend({}, this.data, {
 				app: app
 			});
@@ -74,13 +75,14 @@ function(
 		addNew: function(text) {
 			document.querySelector('input').value = '';
 			var id = data.length;
-			data.push({
+			var child = {
 				id: id,
 				text: text,
 				done: false,
 				children: [],
 				parent: this.data.id
-			});
+			};
+			data.push(child);
 			data[this.data.id].children.unshift(id);
 			this.addChild({
 				id: id,
@@ -89,6 +91,8 @@ function(
 				children: [],
 				parent: this.data.id
 			}, true);
+			this.el.find('.navButton').text("Up");
+			this.el.addClass('children');
 			events.fire('stitch');
 		},
 		addChild: function(childData, prepend) {

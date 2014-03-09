@@ -5,7 +5,7 @@
 	z-index:2;
 	background-color: #E8BCCC;
 	overflow:hidden;
-	transition:height 0.3s;
+	transition:height 0.35s;
 
 	h1 {
 		padding:1em 0;
@@ -44,6 +44,10 @@
 	}
 	.thinkDoToggle {
 		right:0;
+		opacity:0;
+		-webkit-transform:translateX(100%);
+		transition-property:-webkit-transform, opacity;
+		transition-duration:0.35s;
 	}
 	input {
 		width:100%;
@@ -52,9 +56,17 @@
 		padding:1em;
 	}
 }
+.children {
+	.toolbar {
+		.thinkDoToggle {
+			opacity:1;
+			-webkit-transform:translateX(0);
+		}
+	}
+}
 .content {
 	padding-top: 3em;
-	transition:padding-top 0.3s;
+	transition:padding-top 0.35s;
 
 	ul {
 		padding:0;
