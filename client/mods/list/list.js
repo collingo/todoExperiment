@@ -67,7 +67,9 @@ function(
 			this.renderChildren.call(this);
 		},
 		renderChildren: function() {
-			_forEach(this.data.children, this.appendChild.bind(this));
+			_forEach(this.data.children, function(childData) {
+				this.addChild(childData);
+			}.bind(this));
 		},
 		addNew: function(text) {
 			document.querySelector('input').value = '';
@@ -79,19 +81,24 @@ function(
 				children: [],
 				parent: this.data.id
 			});
-			data[this.data.id].children.push(id);
-			this.appendChild({
+			data[this.data.id].children.unshift(id);
+			this.addChild({
 				id: id,
 				text: text,
 				done: false,
 				children: [],
 				parent: this.data.id
-			});
+			}, true);
 			events.fire('stitch');
 		},
-		appendChild: function(childData) {
+		addChild: function(childData, prepend) {
+			console.log(arguments, prepend);
 			var item = new ItemView(_extend({}, childData));
-			this.list.append(item);
+			if(prepend) {
+				this.list.prepend(item);
+			} else {
+				this.list.append(item);
+			}
 		}
 	});
 
