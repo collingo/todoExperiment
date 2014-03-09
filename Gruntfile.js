@@ -108,7 +108,8 @@ module.exports = function (grunt) {
 
 		nodemon: {
 			dev: {
-				script: 'server/index.js'
+				script: 'server/index.js',
+				ext: 'js,coffee,json'
 			}
 		},
 

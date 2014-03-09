@@ -4,7 +4,8 @@ define([
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
 	'mods/item/item',
-	'events'
+	'events',
+	'mods/app/app'
 ],
 function(
 	dom,
@@ -12,7 +13,8 @@ function(
 	_forEach,
 	_extend,
 	ItemView,
-	events
+	events,
+	app
 ){
 
 	function ListView(data) {
@@ -55,7 +57,9 @@ function(
 
 		// methods
 		render: function() {
-			var viewdata = _extend({}, this.data);
+			var viewdata = _extend({}, this.data, {
+				app: app
+			});
 			viewdata.hasParent = this.data.hasOwnProperty('parent');
 			this.el = dom(template(viewdata));
 			this.list = this.el.find('ul');
