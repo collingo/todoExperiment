@@ -1,4 +1,4 @@
-<li class="item dirty">
+<li class="item dirty{{#if childCount}} children{{/if}}">
 	{{#if childCount}}
 		<div class="children">{{childCount}}</div>
 	{{else}}

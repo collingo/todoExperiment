@@ -5,7 +5,6 @@ li.item {
 	min-height: 3em;
 	box-sizing: border-box;
 	position:relative;
-	cursor:pointer;
 	background-color: #fff;
 	-webkit-user-select: text; /* Chrome/Safari */
 	-moz-user-select: text; /* Firefox */
@@ -19,6 +18,9 @@ li.item {
 		display:block;
 		opacity:0;
 		transition:opacity 0.3s;
+	}
+	&.children {
+		cursor:pointer;
 	}
 	
 	.state,
@@ -38,6 +40,7 @@ li.item {
 		-ms-user-select: none; /* IE10+ */
 		-o-user-select: none;
 		user-select: none;
+		cursor:pointer;
 
 		input {
 			cursor: pointer;
@@ -64,6 +67,8 @@ li.item {
 
 .think {
 	li.item {
+		cursor:pointer;
+		
 		.state {
 			opacity:0;
 			-webkit-transform:translateX(100%);
