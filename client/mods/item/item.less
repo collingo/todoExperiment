@@ -2,7 +2,7 @@ li.item {
 	list-style: none;
 	padding: 1em;
 	margin: 0;
-	height: 3em;
+	min-height: 3em;
 	box-sizing: border-box;
 	position:relative;
 	cursor:pointer;
@@ -18,7 +18,7 @@ li.item {
 		top: 0;
 		right: 0;
 		box-sizing: border-box;
-		padding: 1em 0;
+		padding: 1em;
 		display: inline-block;
 		width: 3em;
 		height: 3em;
@@ -32,6 +32,9 @@ li.item {
 		input {
 			cursor: pointer;
 		}
+	}
+	.children {
+		padding: 1em 0;
 	}
 
 	&:nth-child(odd) {
