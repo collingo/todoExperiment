@@ -91,7 +91,6 @@ function(
 				children: [],
 				parent: this.data.id
 			}, true);
-			this.el.find('.navButton').text("Up");
 			this.el.addClass('children');
 			events.fire('stitch');
 		},
