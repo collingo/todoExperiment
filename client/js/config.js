@@ -6,7 +6,7 @@ var config = {
 
 	paths: {
 		underscore: 'libs/lodash-amd/modern',
-		dom: 'libs/dom/dom',
+		jquery: 'libs/jquery/dist/jquery',
 		text: 'libs/requirejs-text/text',
 		Handlebars: 'libs/handlebars/handlebars',
 		hbars: 'libs/requirejs-handlebars/hbars',

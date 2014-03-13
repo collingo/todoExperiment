@@ -1,5 +1,5 @@
 define([
-	'dom',
+	'jquery',
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
@@ -8,7 +8,7 @@ define([
 	'mods/app/app'
 ],
 function(
-	dom,
+	$,
 	template,
 	_forEach,
 	_extend,
@@ -20,7 +20,10 @@ function(
 	function ListView(data) {
 		this.data = data;
 		this.render.call(this);
-		this.el.els[0].bindEvents = this.bindEvents.bind(this);
+		this.el[0].bindEvents = this.bindEvents.bind(this);
+		if(!app.state && !this.data.children.length) {
+			this.input[0].focus();
+		}
 		return this.el;
 	}
 	ListView.prototype = _extend({}, {
@@ -31,6 +34,7 @@ function(
 			this.el.find('.navButton').on('click', this.onNav.bind(this));
 			this.el.find('.thinkDoToggle').on('click', this.onToggleState.bind(this));
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
+			this.input.on('blur', this.onInputBlur.bind(this));
 			this.input.on('keypress', this.onKeyPress.bind(this));
 			events.on('changeState', this.onChangeState.bind(this));
 		},
@@ -43,10 +47,16 @@ function(
 			events.fire('toggleState');
 		},
 		onChangeState: function(state) {
-			this.el.find('.thinkDoToggle').text(["Think", "Do"][state]);
+			this.toggleState(state);
 		},
 		onScrollToolbar: function(e) {
 			e.preventDefault();
+		},
+		onInputBlur: function(e) {
+			var value = this.input.val();
+			if(value.length) {
+				this.addNew(value);
+			}
 		},
 		onKeyPress: function(e) {
 			if(e.keyCode === 13) {
@@ -57,12 +67,11 @@ function(
 
 		// methods
 		render: function() {
-			console.log(this.data);
 			var viewdata = _extend({}, this.data, {
 				app: app
 			});
 			viewdata.hasParent = this.data.hasOwnProperty('parent');
-			this.el = dom(template(viewdata));
+			this.el = $(template(viewdata));
 			this.list = this.el.find('ul');
 			this.input = this.el.find('input');
 			this.renderChildren.call(this);
@@ -101,6 +110,9 @@ function(
 			} else {
 				this.list.append(item);
 			}
+		},
+		toggleState: function(state) {
+			this.el.find('.thinkDoToggle').text(["Think", "Do"][state]);
 		}
 	});
 

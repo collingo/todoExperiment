@@ -1,5 +1,5 @@
 define([
-	'dom',
+	'jquery',
 	'hbars!mods/item/item',
 	'events',
 	'underscore/objects/assign',
@@ -19,7 +19,7 @@ function(
 		this.data = data;
 		this.render.call(this);
 		_bindAll(this, 'bindEvents', 'onToggle', 'onChangeState', 'onClick');
-		this.el.els[0].bindEvents = this.bindEvents;
+		this.el[0].bindEvents = this.bindEvents.bind(this);
 		return this.el;
 	}
 	ItemView.prototype = _extend({}, {

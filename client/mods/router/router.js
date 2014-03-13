@@ -1,7 +1,7 @@
 define([
 	'underscore/objects/cloneDeep',
 	'underscore/collections/forEach',
-	'dom',
+	'jquery',
 
 	'mods/list/list',
 	'routes/list/controller',
@@ -19,10 +19,9 @@ define([
 ) {
 
 	events.on('stitch', function() {
-		$('.dirty').forEach(function(item) {
-			$(item)
-				.removeClass('dirty')
-				.els[0].bindEvents();
+		$('.dirty').each(function(index, item) {
+			$(item).removeClass('dirty');
+			item.bindEvents();
 		});
 	});
 

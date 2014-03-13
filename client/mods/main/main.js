@@ -2,7 +2,7 @@ define([
 	'libs/fastclick/lib/fastclick',
 	'router',
 	'events',
-	'dom',
+	'jquery',
 	'mods/app/app'
 ], function(
 	FastClick,

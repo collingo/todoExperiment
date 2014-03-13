@@ -1,5 +1,5 @@
 define([
-	'dom',
+	'jquery',
 	'underscore/collections/forEach'
 ], function(
 	$,

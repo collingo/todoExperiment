@@ -7,7 +7,7 @@ define([
 	'hbars!mods/list/list',
 	'mods/storage/storage',
 	'events',
-	'dom'
+	'jquery'
 ], function(
 	_clone,
 	_forEach,
