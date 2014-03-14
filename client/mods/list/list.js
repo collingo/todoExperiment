@@ -22,7 +22,7 @@ function(
 		this.render.call(this);
 		this.el[0].bindEvents = this.bindEvents.bind(this);
 		if(!app.state && !this.data.children.length) {
-			this.input[0].focus();
+			this.input.focus();
 		}
 		return this.el;
 	}
@@ -36,6 +36,7 @@ function(
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
 			this.input.on('blur', this.onInputBlur.bind(this));
 			this.input.on('keypress', this.onKeyPress.bind(this));
+			this.input.on('keyup', this.onKeyUp.bind(this));
 			events.on('changeState', this.onChangeState.bind(this));
 		},
 		onNav: function(e) {
@@ -53,15 +54,24 @@ function(
 			e.preventDefault();
 		},
 		onInputBlur: function(e) {
-			var value = this.input.val();
-			if(value.length) {
-				this.addNew(value);
+			this.input.val('');
+		},
+		onKeyUp: function(e) {
+			e.preventDefault();
+			switch(e.keyCode) {
+			case 13:
+				this.addNew(this.input.val());
+				break;
+			case 27:
+				e.preventDefault();
+				this.input.blur();
+				break;
 			}
 		},
 		onKeyPress: function(e) {
-			if(e.keyCode === 13) {
+			if(!this.input.val().length && e.keyCode > 94 && e.keyCode < 123) {
 				e.preventDefault();
-				this.addNew(this.input.val());
+				this.input.val(['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'][e.keyCode - 97]);
 			}
 		},
 
