@@ -17,7 +17,8 @@ function setupServer(name, port, directory, built, todosCollection) {
 	var server = express();
 	server.use(express.static(directory));
 	server.configure(function() {
-		server.use(express.bodyParser());
+		server.use(express.urlencoded());
+		server.use(express.json());
 	});
 	server.use(function(req, res, next) {
 		if(built) {
