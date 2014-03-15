@@ -50,7 +50,7 @@ function(
 			this.el.find('.navButton').on('click', this.onNav);
 			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
-			this.el.on('change', '.item', this.onItemChange);
+			this.el.on('itemStateChange', '.item', this.onItemChange);
 			this.el.on('delete', '.item', this.onItemDelete);
 			this.input.on('blur', this.onInputBlur);
 			this.input.on('keypress', this.onKeyPress);
@@ -95,7 +95,7 @@ function(
 			}
 		},
 		onItemChange: function(e, data) {
-			data.guid = this.guid();
+			data.guid = app.guid();
 			this.pendingSave[data.guid] = e.target;
 			this.el.trigger('itemChange', data);
 		},

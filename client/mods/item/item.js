@@ -104,7 +104,7 @@ function(
 		toggle: function() {
 			this.data.done = this.data.done ? 0 : 1;
 			this.el.find('input')[0].checked = !!this.data.done;
-			this.el.trigger('change', {
+			this.el.trigger('itemStateChange', {
 				id: this.data.id,
 				change: {
 					done: this.data.done ? 1 : 0
