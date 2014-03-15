@@ -100,7 +100,7 @@ function(
 			this.el.trigger('itemChange', data);
 		},
 		onItemDelete: function(e, data) {
-			data.guid = this.guid();
+			data.guid = app.guid();
 			this.pendingSave[data.guid] = e.target;
 			this.el.trigger('itemDelete', data);
 		},
@@ -131,14 +131,8 @@ function(
 				this.addChild(childData);
 			}.bind(this));
 		},
-		guid: function() {
-			function s4() {
-				return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-			}
-			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-		},
 		addNew: function(text) {
-			var guid = this.guid();
+			var guid = app.guid();
 			var todo = {
 				text: text,
 				done: 0,

@@ -1,4 +1,5 @@
 define([
+	'mods/app/app',
 	'underscore/collections/where',
 	'underscore/arrays/findIndex',
 	'underscore/objects/assign',
@@ -6,6 +7,7 @@ define([
 	'underscore/collections/reject',
 	'jquery'
 ], function(
+	app,
 	_where,
 	_findIndex,
 	_extend,
@@ -35,13 +37,13 @@ define([
 			storage.set(id, _extend(storage.get(id), changeSet));
 		},
 		remove: function(id) {
-			store = window.store = _reject(store, function(num) {
-				return num === id;
+			store = _reject(store, function(todo) {
+				return todo.id === id;
 			});
 		},
 
 		add: function(data, done) {
-			data.todo.id = store.length;
+			data.todo.id = app.guid();
 			storage.set(data.todo.id, data.todo);
 			var cachedParentsChildren = [].concat(storage.get(data.todo.parent).children);
 			var changedParentsChildren = [].concat(cachedParentsChildren);
@@ -49,6 +51,7 @@ define([
 			storage.change(data.todo.parent, {
 				children: changedParentsChildren
 			});
+			console.log(data.todo.id);
 			$.ajax({
 				url: '/todos',
 				type: "post",

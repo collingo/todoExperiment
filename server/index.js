@@ -59,22 +59,18 @@ function setupServer(name, port, directory, built, todosCollection) {
 	// api
 	server.post('/todos', function(req, res) {
 		var newTodo = req.body;
-		todosCollection.count(function(err, count) {
+		newTodo.children = [];
+		todosCollection.insert(req.body, function(err, todosAdded) {
 			if(err) throw err;
-			newTodo.id = count;
-			newTodo.children = [];
-			todosCollection.insert(req.body, function(err, todosAdded) {
-				if(err) throw err;
-				var savedTodo = todosAdded[0]
-				var parentId = parseInt(savedTodo.parent, 10);
-				todosCollection.findOne({id:parentId}, function(err, parent) {
-					var childArray = parent.children;
-					childArray.unshift(savedTodo.id);
-					todosCollection.update({id:parentId}, {$set: {children:childArray}}, function() {
-						setTimeout(function() {
-							res.json(savedTodo);
-						}, 2000);
-					});
+			var savedTodo = todosAdded[0]
+			var parentId = parseInt(savedTodo.parent, 10);
+			todosCollection.findOne({id:parentId}, function(err, parent) {
+				var childArray = parent.children;
+				childArray.unshift(savedTodo.id);
+				todosCollection.update({id:parentId}, {$set: {children:childArray}}, function() {
+					setTimeout(function() {
+						res.json(savedTodo);
+					}, 2000);
 				});
 			});
 		});
@@ -89,7 +85,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 		});
 	});
 	server.delete('/todos/:id', function(req, res) {
-		var id = parseInt(req.params.id, 10);
+		var id = req.params.id;
 		todosCollection.findOne({id:id}, function(err, todo) {
 			var parentId = todo.parent;
 			todosCollection.remove({id:id}, function(err, removed) {
