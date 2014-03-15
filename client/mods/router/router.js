@@ -18,11 +18,17 @@ define([
 	dispatch
 ) {
 
-	events.on('stitch', function() {
-		$('.dirty').each(function(index, item) {
-			$(item).removeClass('dirty');
-			item.bindEvents();
-		});
+	function stitchItem(index, item) {
+		$(item).removeClass('dirty');
+		item.bindEvents();
+	}
+
+	events.on('stitch', function(item) {
+		if(item) {
+			stitchItem(null, item);
+		} else {
+			$('.dirty').each(stitchItem);
+		}
 	});
 
 	function Router() {

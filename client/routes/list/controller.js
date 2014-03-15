@@ -2,6 +2,7 @@ define([
 	'underscore/objects/cloneDeep',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
+	'underscore/functions/bindAll',
 
 	'mods/list/list',
 	'hbars!mods/list/list',
@@ -12,6 +13,7 @@ define([
 	_clone,
 	_forEach,
 	_extend,
+	_bindAll,
 
 	ListView,
 	template,
@@ -21,12 +23,12 @@ define([
 ) {
 
 	function Controller() {
-
+		_bindAll(this, 'onNewTodo', 'onAddedTodo');
 	}
 	Controller.prototype = {
 		constructor: Controller,
 		getHTML: function(element) {
-		  return element.els[0].outerHTML;
+			return element.els[0].outerHTML;
 		},
 		buildViewObject: function(id) {
 			var obj = _clone(storage.get(id));
@@ -48,7 +50,25 @@ define([
 			return obj;
 		},
 		render: function(id) {
-			return new ListView(this.buildViewObject(id));
+			this.view = new ListView(this.buildViewObject(id));
+			this.bindViewComms();
+			return this.view;
+		},
+		bindViewComms: function() {
+			$(this.view).on('newTodo', this.onNewTodo);
+		},
+		addTodo: function(data) {
+			storage.add(data, this.onAddedTodo);
+		},
+
+		// comms
+		onNewTodo: function(e, data) {
+			console.log('onNewTodo', data);
+			this.addTodo(data);
+		},
+		onAddedTodo: function(data) {
+			console.log('onAddedTodo', data);
+			this.view.trigger('addedTodo', data);
 		}
 	};
 

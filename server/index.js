@@ -7,7 +7,8 @@ var mongo = require('mongodb');
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
 var rev = false;
-var dbConnection = process.env.SUBDOMAIN ?
+var isDev = !process.env.SUBDOMAIN;
+var dbConnection = !isDev ?
 	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255' :
 	'mongodb://127.0.0.1:27017/thinkDo';
 
@@ -48,6 +49,19 @@ function setupServer(name, port, directory, built, todosCollection) {
 			});
 		});
 	});
+
+	// api
+	server.post('/todo', function(req, res) {
+		console.log(req.body);
+		// todosCollection.find().toArray(function(err, data) {
+		// 	res.render('index', {
+		// 		id: req.params.id,
+		// 		built: built,
+		// 		rev: rev,
+		// 		data: JSON.stringify(data)
+		// 	});
+		// });
+	});
 	server.listen(port);
 	console.log(name+" server started on http://localhost:"+port+"/");
 	return server;
@@ -57,7 +71,7 @@ function startServers(todosCollection) {
 	var built = setupServer("Built", 8080, builtDir, true, todosCollection);
 
 	// serve development code when not in production
-	if(!process.env.SUBDOMAIN) {
+	if(isDev) {
 		var dev = setupServer("Development", 8081, devDir, false, todosCollection);
 	}
 };

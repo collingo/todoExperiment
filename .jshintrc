@@ -29,6 +29,6 @@
 		"describe": true,
 		"it": true,
 		"expect": true,
-		"data": true
+		"store": true
 	}
 }

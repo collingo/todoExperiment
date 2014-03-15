@@ -3,6 +3,7 @@ define([
 	'hbars!mods/list/list',
 	'underscore/collections/forEach',
 	'underscore/objects/assign',
+	'underscore/functions/bindAll',
 	'mods/item/item',
 	'events',
 	'mods/app/app'
@@ -12,13 +13,25 @@ function(
 	template,
 	_forEach,
 	_extend,
+	_bindAll,
 	ItemView,
 	events,
 	app
 ){
 
 	function ListView(data) {
+		_bindAll(this,
+			'onNav',
+			'onToggleState',
+			'onScrollToolbar',
+			'onInputBlur',
+			'onKeyPress',
+			'onKeyUp',
+			'onChangeState',
+			'onAddedTodo'
+		);
 		this.data = data;
+		this.pendingSave = [];
 		this.render.call(this);
 		this.el[0].bindEvents = this.bindEvents.bind(this);
 		if(!app.state && !this.data.children.length) {
@@ -31,13 +44,14 @@ function(
 
 		// events
 		bindEvents: function() {
-			this.el.find('.navButton').on('click', this.onNav.bind(this));
-			this.el.find('.thinkDoToggle').on('click', this.onToggleState.bind(this));
-			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar.bind(this));
-			this.input.on('blur', this.onInputBlur.bind(this));
-			this.input.on('keypress', this.onKeyPress.bind(this));
-			this.input.on('keyup', this.onKeyUp.bind(this));
-			events.on('changeState', this.onChangeState.bind(this));
+			this.el.find('.navButton').on('click', this.onNav);
+			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
+			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
+			this.input.on('blur', this.onInputBlur);
+			this.input.on('keypress', this.onKeyPress);
+			this.input.on('keyup', this.onKeyUp);
+			events.on('changeState', this.onChangeState);
+			this.el.on('addedTodo', this.onAddedTodo);
 		},
 		onNav: function(e) {
 			e.preventDefault();
@@ -75,6 +89,12 @@ function(
 			}
 		},
 
+		// comms
+		onAddedTodo: function(e, data) {
+			console.log('onAddedTodo', data);
+			this.pendingSave[data.guid].trigger('saved', data.todo);
+		},
+
 		// methods
 		render: function() {
 			var viewdata = _extend({}, this.data, {
@@ -91,34 +111,36 @@ function(
 				this.addChild(childData);
 			}.bind(this));
 		},
+		guid: function() {
+			function s4() {
+				return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+			}
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		},
 		addNew: function(text) {
-			document.querySelector('input').value = '';
-			var id = data.length;
-			var child = {
-				id: id,
+			var guid = this.guid();
+			var todo = {
 				text: text,
 				done: false,
 				children: [],
 				parent: this.data.id
 			};
-			data.push(child);
-			data[this.data.id].children.unshift(id);
-			this.addChild({
-				id: id,
-				text: text,
-				done: false,
-				children: [],
-				parent: this.data.id
-			}, true);
+			document.querySelector('input').value = '';
+			this.el.trigger('newTodo', {
+				todo: todo,
+				guid: guid
+			});
+			this.addChild(todo, guid);
 			this.el.addClass('children');
 			events.fire('stitch');
 		},
-		addChild: function(childData, prepend) {
-			var item = new ItemView(_extend({}, childData));
-			if(prepend) {
-				this.list.prepend(item);
+		addChild: function(todoData, guid) {
+			var itemView = new ItemView(_extend({}, todoData));
+			this.pendingSave[guid] = itemView;
+			if(guid) {
+				this.list.prepend(itemView);
 			} else {
-				this.list.append(item);
+				this.list.append(itemView);
 			}
 		},
 		toggleState: function(state) {
