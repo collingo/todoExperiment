@@ -58,7 +58,6 @@ function(
 
 		// comms
 		onSaved: function(e, newData) {
-			console.log('onSaved', newData);
 			this.data = newData;
 			this.el.removeClass('unsaved');
 		},
@@ -74,10 +73,10 @@ function(
 			this.data.done = !this.data.done;
 			if(this.data.done) {
 				this.el.find('input')[0].checked = true;
-				store[this.data.id].done = true;
+				store[this.data.id].done = 1;
 			} else {
 				this.el.find('input')[0].checked = false;
-				store[this.data.id].done = false;
+				store[this.data.id].done = 0;
 			}
 		}
 	});

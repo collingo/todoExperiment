@@ -1,7 +1,9 @@
 define([
-	'underscore/collections/where'
+	'underscore/collections/where',
+	'jquery'
 ], function(
-	_where
+	_where,
+	$
 ) {
 
 	var storage = window.storage = {
@@ -14,12 +16,23 @@ define([
 			})[0];
 		},
 		add: function(data, done) {
-			setTimeout(function() {
-				data.todo.id = store.length;
-				store[data.todo.id] = data.todo;
-				store[data.todo.parent].children.unshift(data.todo.id);
-				done(data);
-			}, 2000);
+			$.ajax({
+				url: '/todos',
+				type: "post",
+				data: JSON.stringify(data.todo),
+				contentType: 'application/json',
+				processData: false,
+				error: function() {
+					console.log('error', data.guid);
+				},
+				success: function(todo) {
+					store[todo.parent].children.unshift(todo.id);
+					done({
+						todo: todo,
+						guid: data.guid
+					});
+				}
+			});
 		},
 		set: function(dataToStore) {
 			store[dataToStore.id] = dataToStore;

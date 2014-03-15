@@ -15,6 +15,9 @@ var dbConnection = !isDev ?
 function setupServer(name, port, directory, built, todosCollection) {
 	var server = express();
 	server.use(express.static(directory));
+	server.configure(function() {
+		server.use(express.bodyParser());
+	});
 	server.use(function(req, res, next) {
 		if(built) {
 			rev = require(directory + '/build.json').revision;
@@ -31,6 +34,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 	server.set('views', path.resolve(__dirname + '/views'));
 	server.get('/', function(req, res) {
 		todosCollection.find().toArray(function(err, data) {
+			if(err) throw err;
 			res.render('index', {
 				id: 0,
 				built: built,
@@ -41,6 +45,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 	});
 	server.get('/:id', function(req, res) {
 		todosCollection.find().toArray(function(err, data) {
+			if(err) throw err;
 			res.render('index', {
 				id: req.params.id,
 				built: built,
@@ -51,16 +56,25 @@ function setupServer(name, port, directory, built, todosCollection) {
 	});
 
 	// api
-	server.post('/todo', function(req, res) {
-		console.log(req.body);
-		// todosCollection.find().toArray(function(err, data) {
-		// 	res.render('index', {
-		// 		id: req.params.id,
-		// 		built: built,
-		// 		rev: rev,
-		// 		data: JSON.stringify(data)
-		// 	});
-		// });
+	server.post('/todos', function(req, res) {
+		var newTodo = req.body;
+		todosCollection.count(function(err, count) {
+			if(err) throw err;
+			newTodo.id = count;
+			newTodo.children = [];
+			todosCollection.insert(req.body, function(err, todosAdded) {
+				if(err) throw err;
+				var savedTodo = todosAdded[0]
+				var parentId = parseInt(savedTodo.parent, 10);
+				todosCollection.findOne({id:parentId}, function(err, parent) {
+					var childArray = parent.children;
+					childArray.unshift(savedTodo.id);
+					todosCollection.update({id:parentId}, {$set: {children:childArray}}, function() {
+						res.json(savedTodo);
+					});
+				});
+			});
+		});
 	});
 	server.listen(port);
 	console.log(name+" server started on http://localhost:"+port+"/");

@@ -5,91 +5,91 @@
 }, {
 	"id": 1,
 	"text": "Work",
-	"done": false,
+	"done": 0,
 	"children": [5],
 	"parent": 0
 }, {
 	"id": 2,
 	"text": "Shopping",
-	"done": false,
+	"done": 0,
 	"children": [6,7],
 	"parent": 0
 }, {
 	"id": 3,
 	"text": "Phone Mum",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 4,
 	"text": "Clean house",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 5,
 	"text": "Email client",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 1
 },{
 	"id": 6,
 	"text": "Milk",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 2
 }, {
 	"id": 7,
 	"text": "Bread",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 2
 },{
 	"id": 8,
 	"text": "Clean house",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 9,
 	"text": "Email client",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 10,
 	"text": "Milk",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 }, {
 	"id": 11,
 	"text": "Bread",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 12,
 	"text": "Clean house",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 13,
 	"text": "Email client",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 },{
 	"id": 14,
 	"text": "Milk",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 }, {
 	"id": 15,
 	"text": "Bread",
-	"done": false,
+	"done": 0,
 	"children": [],
 	"parent": 0
 }]

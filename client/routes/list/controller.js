@@ -63,11 +63,9 @@ define([
 
 		// comms
 		onNewTodo: function(e, data) {
-			console.log('onNewTodo', data);
 			this.addTodo(data);
 		},
 		onAddedTodo: function(data) {
-			console.log('onAddedTodo', data);
 			this.view.trigger('addedTodo', data);
 		}
 	};

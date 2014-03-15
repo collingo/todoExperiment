@@ -91,7 +91,6 @@ function(
 
 		// comms
 		onAddedTodo: function(e, data) {
-			console.log('onAddedTodo', data);
 			this.pendingSave[data.guid].trigger('saved', data.todo);
 		},
 
@@ -121,7 +120,7 @@ function(
 			var guid = this.guid();
 			var todo = {
 				text: text,
-				done: false,
+				done: 0,
 				children: [],
 				parent: this.data.id
 			};
