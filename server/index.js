@@ -37,7 +37,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 		todosCollection.find().toArray(function(err, data) {
 			if(err) throw err;
 			res.render('index', {
-				id: 0,
+				id: "",
 				built: built,
 				rev: rev,
 				data: JSON.stringify(data)
@@ -63,7 +63,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 		todosCollection.insert(req.body, function(err, todosAdded) {
 			if(err) throw err;
 			var savedTodo = todosAdded[0]
-			var parentId = parseInt(savedTodo.parent, 10);
+			var parentId = savedTodo.parent;
 			todosCollection.findOne({id:parentId}, function(err, parent) {
 				var childArray = parent.children;
 				childArray.unshift(savedTodo.id);
@@ -76,7 +76,7 @@ function setupServer(name, port, directory, built, todosCollection) {
 		});
 	});
 	server.put('/todos/:id', function(req, res) {
-		var id = parseInt(req.params.id, 10);
+		var id = req.params.id;
 		todosCollection.update({id:id}, {$set: req.body}, function(err, updatedTodo) {
 			if(err) throw err;
 			todosCollection.findOne({id:id}, function(err, todo) {

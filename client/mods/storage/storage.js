@@ -51,7 +51,6 @@ define([
 			storage.change(data.todo.parent, {
 				children: changedParentsChildren
 			});
-			console.log(data.todo.id);
 			$.ajax({
 				url: '/todos',
 				type: "post",

@@ -49,17 +49,17 @@ define([
 
 		// methods
 		init: function(id) {
-			this.replace(id);
+			// this.replace(id);
 			this.processView(id);
 		},
 		push: function(to) {
-			to = to || '/';
+			to = (to === "root") ? '/' : to;
 			history.pushState({
 				url: to
 			}, to, to);
 		},
 		replace: function(to) {
-			to = to || '/';
+			to = (to === "root") ? '/' : to;
 			history.replaceState({
 				url: to
 			}, to, to);
@@ -71,7 +71,7 @@ define([
 			this.processView(to);
 		},
 		processView: function(location) {
-			var view = listController.render(parseInt(location, 10) || 0);
+			var view = listController.render(location || "root");
 			dispatch(view);
 			events.fire('stitch');
 		}
