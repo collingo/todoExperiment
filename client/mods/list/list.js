@@ -28,7 +28,7 @@ function(
 			'onKeyPress',
 			'onKeyUp',
 			'onChangeState',
-			'onAddedTodo',
+			'onAddResponse',
 			'onItemChange'
 		);
 		this.data = data;
@@ -48,12 +48,12 @@ function(
 			this.el.find('.navButton').on('click', this.onNav);
 			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
-			this.el.find('.item').on('change', this.onItemChange);
+			this.el.on('change', '.item', this.onItemChange);
 			this.input.on('blur', this.onInputBlur);
 			this.input.on('keypress', this.onKeyPress);
 			this.input.on('keyup', this.onKeyUp);
 			events.on('changeState', this.onChangeState);
-			this.el.on('addedTodo', this.onAddedTodo);
+			this.el.on('listAddResponse', this.onAddResponse);
 		},
 		onNav: function(e) {
 			e.preventDefault();
@@ -97,8 +97,8 @@ function(
 		},
 
 		// comms
-		onAddedTodo: function(e, data) {
-			this.pendingSave[data.guid].trigger('saved', data.todo);
+		onAddResponse: function(e, data) {
+			this.pendingSave[data.guid].trigger('itemAddResponse', data);
 			delete this.pendingSave[data.guid];
 		},
 

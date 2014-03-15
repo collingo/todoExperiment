@@ -23,7 +23,7 @@ function(
 			'onToggle',
 			'onChangeState',
 			'onClick',
-			'onSaved'
+			'onAddResponse'
 		);
 		this.el[0].bindEvents = this.bindEvents.bind(this);
 		return this.el;
@@ -34,7 +34,7 @@ function(
 		// events
 		bindEvents: function() {
 			this.el.find('.state').on('click', this.onToggle);
-			this.el.on('saved', this.onSaved);
+			this.el.on('itemAddResponse', this.onAddResponse);
 			events.on('changeState', this.onChangeState);
 			this.bindChildNav();
 		},
@@ -59,9 +59,15 @@ function(
 		},
 
 		// comms
-		onSaved: function(e, newData) {
-			this.data = newData;
-			this.el.removeClass('unsaved');
+		onAddResponse: function(e, data) {
+			if(data.status) {
+				this.data = data.todo;
+				this.el
+					.removeClass('unsaved')
+					.removeClass('error');
+			} else {
+				this.el.addClass('error');
+			}
 		},
 
 		// methods

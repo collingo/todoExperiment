@@ -1,4 +1,4 @@
-<li class="item dirty{{#unless id}} unsaved{{/unless}}{{#if childCount}} children{{/if}}">
+<li class="item dirty{{#unless _id}} unsaved{{/unless}}{{#if childCount}} children{{/if}}">
 	{{#if childCount}}
 		<div class="children">{{childCount}}</div>
 	{{else}}

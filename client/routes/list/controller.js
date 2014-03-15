@@ -25,7 +25,7 @@ define([
 	function Controller() {
 		_bindAll(this,
 			'onNewTodo',
-			'onAddedTodo',
+			'onAddResponse',
 			'onItemChange'
 		);
 	}
@@ -63,7 +63,7 @@ define([
 			$(this.view).on('itemChange', this.onItemChange);
 		},
 		addTodo: function(data) {
-			storage.add(data, this.onAddedTodo);
+			storage.add(data, this.onAddResponse);
 		},
 		itemChange: function(data) {
 			storage.update(data, this.itemChanged);
@@ -76,8 +76,8 @@ define([
 		onNewTodo: function(e, data) {
 			this.addTodo(data);
 		},
-		onAddedTodo: function(data) {
-			this.view.trigger('addedTodo', data);
+		onAddResponse: function(data) {
+			this.view.trigger('listAddResponse', data);
 		},
 		onItemChange: function(e, data) {
 			this.itemChange(data);

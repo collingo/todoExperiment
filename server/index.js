@@ -70,7 +70,9 @@ function setupServer(name, port, directory, built, todosCollection) {
 					var childArray = parent.children;
 					childArray.unshift(savedTodo.id);
 					todosCollection.update({id:parentId}, {$set: {children:childArray}}, function() {
-						res.json(savedTodo);
+						setTimeout(function() {
+							res.json(savedTodo);
+						}, 2000);
 					});
 				});
 			});
