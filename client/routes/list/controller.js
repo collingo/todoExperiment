@@ -23,7 +23,11 @@ define([
 ) {
 
 	function Controller() {
-		_bindAll(this, 'onNewTodo', 'onAddedTodo');
+		_bindAll(this,
+			'onNewTodo',
+			'onAddedTodo',
+			'onItemChange'
+		);
 	}
 	Controller.prototype = {
 		constructor: Controller,
@@ -56,9 +60,16 @@ define([
 		},
 		bindViewComms: function() {
 			$(this.view).on('newTodo', this.onNewTodo);
+			$(this.view).on('itemChange', this.onItemChange);
 		},
 		addTodo: function(data) {
 			storage.add(data, this.onAddedTodo);
+		},
+		itemChange: function(data) {
+			storage.update(data, this.itemChanged);
+		},
+		itemChanged: function(data) {
+			$(this.view).trigger('itemState', data);
 		},
 
 		// comms
@@ -67,6 +78,9 @@ define([
 		},
 		onAddedTodo: function(data) {
 			this.view.trigger('addedTodo', data);
+		},
+		onItemChange: function(e, data) {
+			this.itemChange(data);
 		}
 	};
 

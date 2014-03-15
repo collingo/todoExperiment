@@ -28,7 +28,8 @@ function(
 			'onKeyPress',
 			'onKeyUp',
 			'onChangeState',
-			'onAddedTodo'
+			'onAddedTodo',
+			'onItemChange'
 		);
 		this.data = data;
 		this.pendingSave = [];
@@ -47,6 +48,7 @@ function(
 			this.el.find('.navButton').on('click', this.onNav);
 			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
+			this.el.find('.item').on('change', this.onItemChange);
 			this.input.on('blur', this.onInputBlur);
 			this.input.on('keypress', this.onKeyPress);
 			this.input.on('keyup', this.onKeyUp);
@@ -88,10 +90,16 @@ function(
 				this.input.val(['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'][e.keyCode - 97]);
 			}
 		},
+		onItemChange: function(e, data) {
+			data.guid = this.guid();
+			this.pendingSave[data.guid] = e.target;
+			this.el.trigger('itemChange', data);
+		},
 
 		// comms
 		onAddedTodo: function(e, data) {
 			this.pendingSave[data.guid].trigger('saved', data.todo);
+			delete this.pendingSave[data.guid];
 		},
 
 		// methods
@@ -135,8 +143,8 @@ function(
 		},
 		addChild: function(todoData, guid) {
 			var itemView = new ItemView(_extend({}, todoData));
-			this.pendingSave[guid] = itemView;
 			if(guid) {
+				this.pendingSave[guid] = itemView;
 				this.list.prepend(itemView);
 			} else {
 				this.list.append(itemView);

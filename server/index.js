@@ -76,6 +76,14 @@ function setupServer(name, port, directory, built, todosCollection) {
 			});
 		});
 	});
+	server.put('/todos/:id', function(req, res) {
+		var id = parseInt(req.params.id, 10);
+		todosCollection.update({id:id}, {$set: req.body}, function(err, updatedTodo) {
+			todosCollection.findOne({id:id}, function(err, todo) {
+				res.json(todo);
+			});
+		});
+	});
 	server.listen(port);
 	console.log(name+" server started on http://localhost:"+port+"/");
 	return server;

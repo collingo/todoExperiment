@@ -1,8 +1,12 @@
 define([
 	'underscore/collections/where',
+	'underscore/arrays/findIndex',
+	'underscore/objects/assign',
 	'jquery'
 ], function(
 	_where,
+	_findIndex,
+	_extend,
 	$
 ) {
 
@@ -14,6 +18,9 @@ define([
 			return _where(store, {
 				id: id
 			})[0];
+		},
+		set: function(data) {
+			store[_findIndex(store, {id:data.id})] = data;
 		},
 		add: function(data, done) {
 			$.ajax({
@@ -34,8 +41,25 @@ define([
 				}
 			});
 		},
-		set: function(dataToStore) {
-			store[dataToStore.id] = dataToStore;
+		update: function(data, done) {
+			storage.set(_extend(storage.get(data.id), data.change));
+			$.ajax({
+				url: '/todos/'+data.id,
+				type: "put",
+				data: JSON.stringify(data.change),
+				contentType: 'application/json',
+				processData: false,
+				error: function() {
+					storage.set(_extend(storage.get(data.id), data.old));
+					console.log('error', data.guid);
+				},
+				success: function(todo) {
+					done({
+						todo: todo,
+						guid: data.guid
+					});
+				}
+			});
 		}
 	};
 

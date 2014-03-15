@@ -45,6 +45,8 @@ function(
 				this.el.off('click', this.onClick);
 			}
 		},
+
+		// handlers
 		onChangeState: function() {
 			this.bindChildNav();
 		},
@@ -70,14 +72,17 @@ function(
 			this.el = dom(template(viewdata));
 		},
 		toggle: function() {
-			this.data.done = !this.data.done;
-			if(this.data.done) {
-				this.el.find('input')[0].checked = true;
-				store[this.data.id].done = 1;
-			} else {
-				this.el.find('input')[0].checked = false;
-				store[this.data.id].done = 0;
-			}
+			this.data.done = this.data.done ? 0 : 1;
+			this.el.find('input')[0].checked = !!this.data.done;
+			this.el.trigger('change', {
+				id: this.data.id,
+				change: {
+					done: this.data.done ? 1 : 0
+				},
+				old: {
+					done: this.data.done ? 0 : 1
+				}
+			});
 		}
 	});
 
