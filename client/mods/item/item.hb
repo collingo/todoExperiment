@@ -1,4 +1,5 @@
-<li class="item dirty{{#unless _id}} unsaved{{/unless}}{{#if childCount}} children{{/if}}">
+<li class="item dirty{{#unless _id}} updating{{/unless}}{{#unless id}} deleting{{/unless}}{{#if childCount}} children{{/if}}">
+	<div class="delete"></div>
 	{{#if childCount}}
 		<div class="children">{{childCount}}</div>
 	{{else}}

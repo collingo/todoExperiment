@@ -3,12 +3,14 @@ define([
 	'underscore/arrays/findIndex',
 	'underscore/objects/assign',
 	'underscore/objects/clone',
+	'underscore/collections/reject',
 	'jquery'
 ], function(
 	_where,
 	_findIndex,
 	_extend,
 	_clone,
+	_reject,
 	$
 ) {
 
@@ -33,7 +35,9 @@ define([
 			storage.set(id, _extend(storage.get(id), changeSet));
 		},
 		remove: function(id) {
-			delete store[_findIndex(store, {id:id})];
+			store = window.store = _reject(store, function(num) {
+				return num === id;
+			});
 		},
 
 		add: function(data, done) {
@@ -56,7 +60,7 @@ define([
 					storage.change(data.todo.parent, {
 						children: cachedParentsChildren
 					});
-					console.log('error', data.guid);
+					console.log('Create error', data.guid);
 					done({
 						status: 0,
 						todo: data.todo,
@@ -84,11 +88,40 @@ define([
 				timeout: 10000,
 				error: function() {
 					storage.change(data.id, data.old);
-					console.log('error', data.guid);
+					console.log('Update error', data.guid);
 				},
 				success: function(todo) {
 					done({
 						todo: todo,
+						guid: data.guid
+					});
+				}
+			});
+		},
+		del: function(data, done) {
+			var todo = storage.get(data.id);
+			var parent = storage.get(todo.parent);
+			$.ajax({
+				url: '/todos/'+data.id,
+				type: "delete",
+				timeout: 10000,
+				error: function() {
+					console.log('Delete error', data.id);
+					done({
+						status: 0,
+						id: data.id,
+						guid: data.guid
+					});
+				},
+				success: function() {
+					storage.change(todo.parent, {
+						children: _reject(parent.children, function(num) {
+							return num === data.id;
+						})
+					});
+					storage.remove(data.id);
+					done({
+						status: 1,
 						guid: data.guid
 					});
 				}

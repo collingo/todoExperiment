@@ -29,7 +29,9 @@ function(
 			'onKeyUp',
 			'onChangeState',
 			'onAddResponse',
-			'onItemChange'
+			'onDeleteResponse',
+			'onItemChange',
+			'onItemDelete'
 		);
 		this.data = data;
 		this.pendingSave = [];
@@ -49,11 +51,13 @@ function(
 			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
 			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
 			this.el.on('change', '.item', this.onItemChange);
+			this.el.on('delete', '.item', this.onItemDelete);
 			this.input.on('blur', this.onInputBlur);
 			this.input.on('keypress', this.onKeyPress);
 			this.input.on('keyup', this.onKeyUp);
 			events.on('changeState', this.onChangeState);
 			this.el.on('listAddResponse', this.onAddResponse);
+			this.el.on('itemDeleteResponse', this.onDeleteResponse);
 		},
 		onNav: function(e) {
 			e.preventDefault();
@@ -95,10 +99,19 @@ function(
 			this.pendingSave[data.guid] = e.target;
 			this.el.trigger('itemChange', data);
 		},
+		onItemDelete: function(e, data) {
+			data.guid = this.guid();
+			this.pendingSave[data.guid] = e.target;
+			this.el.trigger('itemDelete', data);
+		},
 
 		// comms
 		onAddResponse: function(e, data) {
-			this.pendingSave[data.guid].trigger('itemAddResponse', data);
+			$(this.pendingSave[data.guid]).trigger('itemAddResponse', data);
+			delete this.pendingSave[data.guid];
+		},
+		onDeleteResponse: function(e, data) {
+			$(this.pendingSave[data.guid]).trigger('deleteResponse', data);
 			delete this.pendingSave[data.guid];
 		},
 

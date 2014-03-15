@@ -26,7 +26,9 @@ define([
 		_bindAll(this,
 			'onNewTodo',
 			'onAddResponse',
-			'onItemChange'
+			'onItemChange',
+			'onItemDelete',
+			'itemDeleteResponse'
 		);
 	}
 	Controller.prototype = {
@@ -61,6 +63,7 @@ define([
 		bindViewComms: function() {
 			$(this.view).on('newTodo', this.onNewTodo);
 			$(this.view).on('itemChange', this.onItemChange);
+			$(this.view).on('itemDelete', this.onItemDelete);
 		},
 		addTodo: function(data) {
 			storage.add(data, this.onAddResponse);
@@ -70,6 +73,12 @@ define([
 		},
 		itemChanged: function(data) {
 			$(this.view).trigger('itemState', data);
+		},
+		itemDelete: function(data) {
+			storage.del(data, this.itemDeleteResponse);
+		},
+		itemDeleteResponse: function(data) {
+			$(this.view).trigger('itemDeleteResponse', data);
 		},
 
 		// comms
@@ -81,6 +90,9 @@ define([
 		},
 		onItemChange: function(e, data) {
 			this.itemChange(data);
+		},
+		onItemDelete: function(e, data) {
+			this.itemDelete(data);
 		}
 	};
 

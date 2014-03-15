@@ -12,6 +12,8 @@ li.item {
 	-o-user-select: text;
 	user-select: text;
 	overflow: hidden;
+	transition-property:padding-left;
+	transition-duration:0.35s;
 
 	&:after {
 		content: ">";
@@ -25,6 +27,7 @@ li.item {
 	
 	.state,
 	.children,
+	.delete,
 	&:after {
 		position: absolute;
 		top: 0;
@@ -46,11 +49,24 @@ li.item {
 			cursor: pointer;
 		}
 	}
-	.state {
-		opacity:1;
+	.delete {
+		right:auto;
+		left:-3em;
+		opacity:0;
 		-webkit-transform:translateX(0);
 		transition-property:-webkit-transform, opacity;
-		transition-duration:0.45s;
+		transition-duration:0.35s;
+		background-color:red;
+
+		&:before {
+			content: "X";
+			display:block;
+		}
+	}
+	.state {
+		opacity:1;
+		transition-property:opacity;
+		transition-duration:0.35s;
 		z-index: 3;
 	}
 	.children {
@@ -64,19 +80,26 @@ li.item {
 		background-color: #f5f5f5;
 	}
 
-	&.unsaved {
+	&.updating {
 		color:gray;
+	}
+	&.deleting {
+		background-color:gray;
 	}
 }
 
 .think {
 	li.item {
 		cursor:pointer;
+		padding-left:4em;
 		
+		.delete {
+			-webkit-transform:translateX(100%);
+			opacity:1;
+		}
 		.state {
 			opacity:0;
-			-webkit-transform:translateX(100%);
-			transition-duration:0.3s;
+			transition-duration:0.35s;
 		}
 
 		&:after {

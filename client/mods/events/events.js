@@ -25,6 +25,17 @@ define([
 			} else {
 				console.error("Event "+event+" does not exist");
 			}
+		},
+		off: function(event, cb) {
+			if(events[event]) {
+				if(cb) {
+					events[event].remove(cb);
+				} else {
+					events[event].removeAll();
+				}
+			} else {
+				console.error("Event "+event+" does not exist");
+			}
 		}
 	};
 

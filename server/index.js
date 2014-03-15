@@ -3,6 +3,7 @@ var exphbs = require('express3-handlebars');
 var path = require('path');
 var gitrev = require('git-rev');
 var mongo = require('mongodb');
+var _ = require('underscore');
 
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
@@ -81,8 +82,27 @@ function setupServer(name, port, directory, built, todosCollection) {
 	server.put('/todos/:id', function(req, res) {
 		var id = parseInt(req.params.id, 10);
 		todosCollection.update({id:id}, {$set: req.body}, function(err, updatedTodo) {
+			if(err) throw err;
 			todosCollection.findOne({id:id}, function(err, todo) {
 				res.json(todo);
+			});
+		});
+	});
+	server.delete('/todos/:id', function(req, res) {
+		var id = parseInt(req.params.id, 10);
+		todosCollection.findOne({id:id}, function(err, todo) {
+			var parentId = todo.parent;
+			todosCollection.remove({id:id}, function(err, removed) {
+				todosCollection.findOne({id:parentId}, function(err, parent) {
+					var children = parent.children;
+					todosCollection.update({id:parentId}, {$set: {children:_.reject(parent.children, function(num) {
+						return num === id;
+					})}}, function() {
+						setTimeout(function() {
+							res.json(removed);
+						}, 2000);
+					});
+				});
 			});
 		});
 	});
