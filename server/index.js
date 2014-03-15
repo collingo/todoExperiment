@@ -1,12 +1,17 @@
-var express = require('express'),
-    exphbs = require('express3-handlebars'),
-    path = require('path'),
-    gitrev = require('git-rev'),
-    builtDir = path.resolve(__dirname + '/../www'),
-    devDir = path.resolve(__dirname + '/../client'),
-    rev = false;
+var express = require('express');
+var exphbs = require('express3-handlebars');
+var path = require('path');
+var gitrev = require('git-rev');
+var mongo = require('mongodb');
 
-function setupServer(name, port, directory, built) {
+var builtDir = path.resolve(__dirname + '/../www');
+var devDir = path.resolve(__dirname + '/../client');
+var rev = false;
+var dbConnection = process.env.SUBDOMAIN ?
+	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255' :
+	'mongodb://127.0.0.1:27017/thinkDo';
+
+function setupServer(name, port, directory, built, todosCollection) {
 	var server = express();
 	server.use(express.static(directory));
 	server.use(function(req, res, next) {
@@ -24,19 +29,23 @@ function setupServer(name, port, directory, built) {
 	server.set('view engine', 'hbs');
 	server.set('views', path.resolve(__dirname + '/views'));
 	server.get('/', function(req, res) {
-		res.render('index', {
-			id: 0,
-			built: built,
-			rev: rev,
-			data: JSON.stringify(require('./data.json'))
+		todosCollection.find().toArray(function(err, data) {
+			res.render('index', {
+				id: 0,
+				built: built,
+				rev: rev,
+				data: JSON.stringify(data)
+			});
 		});
 	});
 	server.get('/:id', function(req, res) {
-		res.render('index', {
-			id: req.params.id,
-			built: built,
-			rev: rev,
-			data: JSON.stringify(require('./data.json'))
+		todosCollection.find().toArray(function(err, data) {
+			res.render('index', {
+				id: req.params.id,
+				built: built,
+				rev: rev,
+				data: JSON.stringify(data)
+			});
 		});
 	});
 	server.listen(port);
@@ -44,11 +53,16 @@ function setupServer(name, port, directory, built) {
 	return server;
 }
 
-(function startServers(prod) {
-	var built = setupServer("Built", 8080, builtDir, true);
+function startServers(todosCollection) {
+	var built = setupServer("Built", 8080, builtDir, true, todosCollection);
 
 	// serve development code when not in production
-	if(!prod) {
-		var dev = setupServer("Development", 8081, devDir, false);
+	if(!process.env.SUBDOMAIN) {
+		var dev = setupServer("Development", 8081, devDir, false, todosCollection);
 	}
-}(!!process.env.SUBDOMAIN));
+};
+
+mongo.connect(dbConnection, function(err, db) {
+	if(err) throw err;
+	startServers(db.collection('todos'));
+});
