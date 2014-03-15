@@ -59,10 +59,10 @@ function(
 		toggle: function() {
 			this.data.done = !this.data.done;
 			if(this.data.done) {
-				this.el.find('input').els[0].checked = true;
+				this.el.find('input')[0].checked = true;
 				data[this.data.id].done = true;
 			} else {
-				this.el.find('input').els[0].checked = false;
+				this.el.find('input')[0].checked = false;
 				data[this.data.id].done = false;
 			}
 		}
