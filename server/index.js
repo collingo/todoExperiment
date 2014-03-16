@@ -8,10 +8,10 @@ var _ = require('lodash');
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
 var rev = false;
-var isDev = !process.env.SUBDOMAIN && process.env.NODE_ENV !== "production";
-var dbConnection = !isDev ?
-	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255' :
-	'mongodb://127.0.0.1:27017/thinkDo';
+var isDev = process.env.NODE_ENV !== "production";
+var dbConnection = isDev ? 
+	'mongodb://127.0.0.1:27017/thinkDo' :
+	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255';
 
 function setupServer(name, port, directory, built, todosCollection) {
 	var server = express();
