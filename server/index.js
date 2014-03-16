@@ -3,7 +3,7 @@ var exphbs = require('express3-handlebars');
 var path = require('path');
 var gitrev = require('git-rev');
 var mongo = require('mongodb');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');

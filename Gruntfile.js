@@ -11,7 +11,7 @@ var clientDir = 'client/',
 		clientDirRelative+'mods/**/*.{less,styl,scss,sass}'
 	],
 	requireConfig = require(clientDirRelative+'js/config'),
-	_ = require('underscore'),
+	_ = require('lodash'),
     gitrev = require('git-rev'),
     fs = require('fs');
 
