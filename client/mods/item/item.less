@@ -12,14 +12,12 @@ li.item {
 	-o-user-select: text;
 	user-select: text;
 	overflow: hidden;
-	transition-property:padding-left;
-	transition-duration:0.35s;
 
 	&:after {
 		content: ">";
 		display:block;
 		opacity:0;
-		transition:opacity 0.3s;
+		transition:opacity 0.35s;
 	}
 	&.children {
 		cursor:pointer;
@@ -51,10 +49,9 @@ li.item {
 	}
 	.delete {
 		right:auto;
-		left:-3em;
+		left:0;
 		opacity:0;
-		-webkit-transform:translateX(0);
-		transition-property:-webkit-transform, opacity;
+		transition-property:opacity;
 		transition-duration:0.35s;
 		background-color:red;
 
@@ -94,17 +91,14 @@ li.item {
 		padding-left:4em;
 		
 		.delete {
-			-webkit-transform:translateX(100%);
 			opacity:1;
 		}
 		.state {
 			opacity:0;
-			transition-duration:0.35s;
 		}
 
 		&:after {
 			opacity:1;
-			transition-duration:1s;
 		}
 	}
 }
