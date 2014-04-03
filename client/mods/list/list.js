@@ -31,9 +31,6 @@ function(
 		this.pendingSave = [];
 		this.render.call(this);
 		this.el[0].bindEvents = this.bindEvents.bind(this);
-		if(!app.state && !this.data.children.length) {
-			this.input.focus();
-		}
 		return this.el;
 	}
 	ListView.prototype = _extend({}, {
