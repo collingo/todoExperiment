@@ -21,17 +21,11 @@ function(
 
 	function ListView(data) {
 		_bindAll(this,
-			'onNav',
-			'onToggleState',
-			'onScrollToolbar',
-			'onInputBlur',
-			'onKeyPress',
-			'onKeyUp',
-			'onChangeState',
 			'onAddResponse',
 			'onDeleteResponse',
 			'onItemChange',
-			'onItemDelete'
+			'onItemDelete',
+			'onNewItem'
 		);
 		this.data = data;
 		this.pendingSave = [];
@@ -47,52 +41,11 @@ function(
 
 		// events
 		bindEvents: function() {
-			this.el.find('.navButton').on('click', this.onNav);
-			this.el.find('.thinkDoToggle').on('click', this.onToggleState);
-			this.el.find('.toolbar').on('touchmove', this.onScrollToolbar);
 			this.el.on('itemStateChange', '.item', this.onItemChange);
 			this.el.on('delete', '.item', this.onItemDelete);
-			this.input.on('blur', this.onInputBlur);
-			this.input.on('keypress', this.onKeyPress);
-			this.input.on('keyup', this.onKeyUp);
-			events.on('changeState', this.onChangeState);
 			this.el.on('listAddResponse', this.onAddResponse);
 			this.el.on('itemDeleteResponse', this.onDeleteResponse);
-		},
-		onNav: function(e) {
-			e.preventDefault();
-			events.fire('go', this.data.parent.id);
-		},
-		onToggleState: function(e) {
-			e.preventDefault();
-			events.fire('toggleState');
-		},
-		onChangeState: function(state) {
-			this.toggleState(state);
-		},
-		onScrollToolbar: function(e) {
-			e.preventDefault();
-		},
-		onInputBlur: function(e) {
-			this.input.val('');
-		},
-		onKeyUp: function(e) {
-			e.preventDefault();
-			switch(e.keyCode) {
-			case 13:
-				this.addNew(this.input.val());
-				break;
-			case 27:
-				e.preventDefault();
-				this.input.blur();
-				break;
-			}
-		},
-		onKeyPress: function(e) {
-			if(!this.input.val().length && e.keyCode > 94 && e.keyCode < 123) {
-				e.preventDefault();
-				this.input.val(['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'][e.keyCode - 97]);
-			}
+			events.on('newItem', this.onNewItem);
 		},
 		onItemChange: function(e, data) {
 			data.guid = app.guid();
@@ -114,6 +67,9 @@ function(
 			$(this.pendingSave[data.guid]).trigger('deleteResponse', data);
 			delete this.pendingSave[data.guid];
 		},
+		onNewItem: function(text) {
+			this.addNew(text);
+		},
 
 		// methods
 		render: function() {
@@ -122,8 +78,6 @@ function(
 			});
 			viewdata.hasParent = this.data.hasOwnProperty('parent');
 			this.el = $(template(viewdata));
-			this.list = this.el.find('ul');
-			this.input = this.el.find('input');
 			this.renderChildren.call(this);
 		},
 		renderChildren: function() {
@@ -152,13 +106,10 @@ function(
 			var itemView = new ItemView(_extend({}, todoData));
 			if(guid) {
 				this.pendingSave[guid] = itemView;
-				this.list.prepend(itemView);
+				this.el.prepend(itemView);
 			} else {
-				this.list.append(itemView);
+				this.el.append(itemView);
 			}
-		},
-		toggleState: function(state) {
-			this.el.find('.thinkDoToggle').text(["Think", "Do"][state]);
 		}
 	});
 

@@ -8,7 +8,8 @@ define([
 		go : new signals.Signal(),
 		stitch : new signals.Signal(),
 		toggleState : new signals.Signal(),
-		changeState : new signals.Signal()
+		changeState : new signals.Signal(),
+		newItem: new signals.Signal()
 	};
 
 	return {

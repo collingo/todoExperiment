@@ -4,6 +4,7 @@ define([
 	'underscore/objects/assign',
 	'underscore/functions/bindAll',
 
+	'mods/toolbar/toolbar',
 	'mods/list/list',
 	'hbars!mods/list/list',
 	'mods/storage/storage',
@@ -15,6 +16,7 @@ define([
 	_extend,
 	_bindAll,
 
+	ToolbarView,
 	ListView,
 	template,
 	storage,
@@ -56,14 +58,18 @@ define([
 			return obj;
 		},
 		render: function(id) {
-			this.view = new ListView(this.buildViewObject(id));
+			this.toolbar = new ToolbarView(this.buildViewObject(id));
+			this.content = new ListView(this.buildViewObject(id));
 			this.bindViewComms();
-			return this.view;
+			return {
+				toolbar: this.toolbar,
+				content: this.content
+			};
 		},
 		bindViewComms: function() {
-			$(this.view).on('newTodo', this.onNewTodo);
-			$(this.view).on('itemChange', this.onItemChange);
-			$(this.view).on('itemDelete', this.onItemDelete);
+			$(this.content).on('newTodo', this.onNewTodo);
+			$(this.content).on('itemChange', this.onItemChange);
+			$(this.content).on('itemDelete', this.onItemDelete);
 		},
 		addTodo: function(data) {
 			storage.add(data, this.onAddResponse);
@@ -72,13 +78,13 @@ define([
 			storage.update(data, this.itemChanged);
 		},
 		itemChanged: function(data) {
-			$(this.view).trigger('itemState', data);
+			$(this.content).trigger('itemState', data);
 		},
 		itemDelete: function(data) {
 			storage.del(data, this.itemDeleteResponse);
 		},
 		itemDeleteResponse: function(data) {
-			$(this.view).trigger('itemDeleteResponse', data);
+			$(this.content).trigger('itemDeleteResponse', data);
 		},
 
 		// comms
@@ -86,7 +92,7 @@ define([
 			this.addTodo(data);
 		},
 		onAddResponse: function(data) {
-			this.view.trigger('listAddResponse', data);
+			this.content.trigger('listAddResponse', data);
 		},
 		onItemChange: function(e, data) {
 			this.itemChange(data);

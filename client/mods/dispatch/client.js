@@ -5,12 +5,15 @@ define([
 	$,
 	_each
 ) {
-	return function(view) {
+	return function(views) {
 
-		// append to window
-		$('body')
+		// append to regions
+		$('.toolbarRegion')
 			.empty()
-			.append(view);
+			.append(views.toolbar);
+		$('.content')
+			.empty()
+			.append(views.content);
 
 	};
 });

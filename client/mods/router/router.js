@@ -71,8 +71,8 @@ define([
 			this.processView(to);
 		},
 		processView: function(location) {
-			var view = listController.render(location || "root");
-			dispatch(view);
+			var views = listController.render(location || "root");
+			dispatch(views);
 			events.fire('stitch');
 		}
 	};
