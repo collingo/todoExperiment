@@ -35,9 +35,6 @@ define([
 	}
 	Controller.prototype = {
 		constructor: Controller,
-		getHTML: function(element) {
-			return element.els[0].outerHTML;
-		},
 		buildViewObject: function(id) {
 			var obj = _clone(storage.get(id));
 			if(obj.children.length) {
