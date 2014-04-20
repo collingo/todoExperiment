@@ -1,9 +1,13 @@
 var express = require('express');
-var exphbs = require('express3-handlebars');
+var Q = require('q');
 var path = require('path');
 var gitrev = require('git-rev');
 var mongo = require('mongodb');
+var QMongoDB = require('q-mongodb');
 var _ = require('lodash');
+var fs = require('fs');
+var stitch = require('../../stitch/src/stitch');
+var pmongo = require('promised-mongo');
 
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
@@ -13,13 +17,15 @@ var dbConnection = isDev ?
 	'mongodb://127.0.0.1:27017/thinkDo' :
 	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255';
 
-function setupServer(name, port, directory, built, todosCollection) {
+var readFile = Q.denodeify(fs.readFile);
+var db = pmongo(dbConnection, ['todos']);
+var todos = db.todos;
+
+function setupServer(name, port, directory, built) {
+
+	// setup
 	var server = express();
 	server.use(express.static(directory));
-	server.configure(function() {
-		server.use(express.urlencoded());
-		server.use(express.json());
-	});
 	server.use(function(req, res, next) {
 		if(built) {
 			rev = require(directory + '/build.json').revision;
@@ -31,29 +37,43 @@ function setupServer(name, port, directory, built, todosCollection) {
 			});
 		}
 	});
-	server.engine('hbs', exphbs({extname: '.hbs'}));
-	server.set('view engine', 'hbs');
-	server.set('views', path.resolve(__dirname + '/views'));
+
+	// web
 	server.get('/', function(req, res) {
-		todosCollection.find().toArray(function(err, data) {
-			if(err) throw err;
-			res.render('index', {
-				id: "",
-				built: built,
-				rev: rev,
-				data: JSON.stringify(data)
-			});
+		var getTodoData = todos.findOne({
+			id: 'root'
+		});
+		var getAllData = todos.find().toArray();
+		var getTemplate = readFile(__dirname + '/views/index.tck', "utf-8");
+		Q.all([
+			getTodoData,
+			getAllData,
+			getTemplate
+		]).spread(function(todo, data, tpl) {
+			res.send(stitch({
+				todo: todo,
+				data: JSON.stringify(data),
+				rev: rev
+			}, tpl));
 		});
 	});
 	server.get('/:id', function(req, res) {
-		todosCollection.find().toArray(function(err, data) {
-			if(err) throw err;
-			res.render('index', {
-				id: req.params.id,
-				built: built,
-				rev: rev,
-				data: JSON.stringify(data)
-			});
+		if(req.params.id === 'favicon.ico') return;
+		var getTodoData = todos.findOne({
+			id: req.params.id
+		});
+		var getAllData = todos.find().toArray();
+		var getTemplate = readFile(__dirname + '/views/index.tck', "utf-8");
+		Q.all([
+			getAllData,
+			getTodoData,
+			getTemplate
+		]).spread(function(data, todo, tpl) {
+			res.send(stitch({
+				todo: todo,
+				data: JSON.stringify(data),
+				rev: rev
+			}, tpl));
 		});
 	});
 
@@ -103,21 +123,16 @@ function setupServer(name, port, directory, built, todosCollection) {
 			});
 		});
 	});
+
+	// startup
 	server.listen(port);
 	console.log(name+" server started on http://localhost:"+port+"/");
 	return server;
 }
 
-function startServers(todosCollection) {
-	var built = setupServer("Built", 8080, builtDir, true, todosCollection);
+var built = setupServer("Built", 8080, builtDir, true);
 
-	// serve development code when not in production
-	if(isDev) {
-		var dev = setupServer("Development", 8081, devDir, false, todosCollection);
-	}
-};
-
-mongo.connect(dbConnection, function(err, db) {
-	if(err) throw err;
-	startServers(db.collection('todos'));
-});
+// serve development code when not in production
+if(isDev) {
+	var dev = setupServer("Development", 8081, devDir, false);
+}
