@@ -52,6 +52,21 @@ function setupServer(name, port, directory, built) {
 		// data
 		var todo = todos.findOne({
 			id: 'root'
+		}).then(function(todo) {
+			var deferred = Q.defer();
+			var fetches = [];
+			for (var i = 0; i < todo.children.length; i++) {
+				(function(i) {
+					fetches.push(todos.findOne({
+						id: todo.children[i]
+					}));
+				})(i);
+			}
+			Q.all(fetches).then(function(children) {
+				todo.children = children;
+				deferred.resolve(todo);
+			});
+			return deferred.promise;
 		});
 		var all = todos.find().toArray();
 
@@ -72,19 +87,6 @@ function setupServer(name, port, directory, built) {
 			// 	app: app,
 			// 	rev: rev
 			// }, layout);
-			todo.children = [{
-				text: "Hello1",
-				childCount: 9,
-				done: true
-			}, {
-				text: "Hello2",
-				childCount: 1,
-				done: false
-			}, {
-				text: "Hello3",
-				childCount: 4,
-				done: false
-			}];
 			var toolbar = stitch({
 				app: app,
 				todo: todo
@@ -106,6 +108,21 @@ function setupServer(name, port, directory, built) {
 		// data
 		var todo = todos.findOne({
 			id: req.params.id
+		}).then(function(todo) {
+			var deferred = Q.defer();
+			var fetches = [];
+			for (var i = 0; i < todo.children.length; i++) {
+				(function(i) {
+					fetches.push(todos.findOne({
+						id: todo.children[i]
+					}));
+				})(i);
+			}
+			Q.all(fetches).then(function(children) {
+				todo.children = children;
+				deferred.resolve(todo);
+			});
+			return deferred.promise;
 		});
 		var all = todos.find().toArray();
 
@@ -122,10 +139,10 @@ function setupServer(name, port, directory, built) {
 			toolbar,
 			list
 		]).spread(function(todo, data, layout, toolbarTpl, listTpl) {
-			layout = stitch({
-				app: app,
-				rev: rev
-			}, layout);
+			// layout = stitch({
+			// 	app: app,
+			// 	rev: rev
+			// }, layout);
 			var toolbar = stitch({
 				app: app,
 				todo: todo
