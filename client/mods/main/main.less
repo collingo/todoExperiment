@@ -4,7 +4,7 @@
 
 html,
 body,
-.contentRegion {
+[region="content"] {
 	height:100%;
 	-webkit-user-select: none; /* Chrome/Safari */
 	-moz-user-select: none; /* Firefox */
@@ -14,7 +14,7 @@ body,
 	transition:padding-top 0.35s;
 }
 
-.contentRegion {
+.content {
 	padding-top:3em;
 
 	.innerwrapper {
@@ -22,7 +22,7 @@ body,
 		overflow-y: scroll;
 		-webkit-overflow-scrolling:touch;
 
-		.content {
+		[region="content"] {
 			height:100%;
 			overflow-y: scroll;
 			-webkit-overflow-scrolling:touch;
@@ -37,7 +37,7 @@ div {
 }
 
 .think {
-	.contentRegion {
+	[region="content"] {
 		padding-top:6em;
 	}
 }

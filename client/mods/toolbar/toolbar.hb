@@ -1,6 +1,6 @@
-<div class="toolbar dirty">
-	<h1>{{text}}</h1>
-	{{#if hasParent}}<div class="navButton">Up</div>{{/if}}
-	<div class="thinkDoToggle">{{#if app.state}}Do{{else}}Think{{/if}}</div>
+<div class="toolbar">
+	<h1>{{todo.text}}</h1>
+	<div class="navButton">Up</div>
+	<div class="thinkDoToggle">{{app.state}}</div>
 	<input type="text" autocorrect="on" autocapitalize="sentences" />
 </div>

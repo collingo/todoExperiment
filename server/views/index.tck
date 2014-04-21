@@ -9,33 +9,15 @@
 	<link href="css/style.css" rel="stylesheet">
 </head>
 <body>
-	<div class="toolbarRegion">
-		<div class="toolbar dirty">
-			<h1>{{todo.text}}</h1>
-			<div class="navButton">Up</div>
-			<div class="thinkDoToggle">{{#if app.state}}Do{{else}}Think{{/if}}</div>
-			<input type="text" autocorrect="on" autocapitalize="sentences" />
-		</div>
-	</div>
+	<div region="toolbar"></div>
 	<div class="content">
 		<div class="innerwrapper">
-			<div class="contentRegion">
-				<ul class="list dirty{{#if children}} children{{/if}}">
-					<li class="item dirty{{#unless _id}} updating{{/unless}}{{#unless id}} deleting{{/unless}}{{#if childCount}} children{{/if}}">
-						<div class="delete"></div>
-						<div class="children">{{childCount}}</div>
-						<div class="state">
-							<input type="checkbox" checked="{{done}}" />
-						</div>
-						<div class="text">{{text}}</div>
-					</li>
-				</ul>
-			</div>
+			<div region="content"></div>
 		</div>
 	</div>
 	<script>
-		var initId = "{{id}}" || "root",
-			store = {{data}};
+		// var initId = "{{id}}" || "root",
+		// 	store = {{data}};
 	</script>
 </body>
 </html>
