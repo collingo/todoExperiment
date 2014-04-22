@@ -12,9 +12,7 @@ var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
 var rev = false;
 var isDev = process.env.NODE_ENV !== "production";
-var dbConnection = isDev ? 
-	'mongodb://127.0.0.1:27017/thinkDo' :
-	'mongodb://nodejitsu:28dac1b222ea09a3acd4e571893893e2@troup.mongohq.com:10042/nodejitsudb353559255';
+var dbConnection = 'mongodb://127.0.0.1:27017/thinkDo';
 
 var readFile = Q.denodeify(fs.readFile);
 var db = pmongo(dbConnection, ['todos']);
