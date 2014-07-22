@@ -71,7 +71,7 @@ module.exports = function (grunt) {
 		},
 
 		clean: {
-			www: ['www','www/**'],
+			www: ['www','www/**','target'],
 			built: [
 				'www/js/config.js',
 				'www/libs/**/*',
@@ -102,6 +102,19 @@ module.exports = function (grunt) {
 					cwd: clientDirRelative,
 					src: ['**'],
 					dest: 'www/'
+				}]
+			},
+			target: {
+				files: [{
+					expand: true,
+					src: [
+						'client/**',
+						'node_modules/**',
+						'server/**',
+						'www/**',
+						'update.sh'
+					],
+					dest: 'target/'
 				}]
 			}
 		},
@@ -203,6 +216,6 @@ module.exports = function (grunt) {
 		}
 		grunt.task.run('jasmine');
 	});
-	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'copy', 'requirejs', 'clean:built', 'uglify', 'cacheRev']);
+	grunt.registerTask('build', ['clean:www', 'jshint', 'css', 'copy:www', 'requirejs', 'clean:built', 'uglify', 'cacheRev', 'copy:target']);
 
 };
