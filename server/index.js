@@ -5,7 +5,7 @@ var gitrev = require('git-rev');
 var mongo = require('mongodb');
 var _ = require('lodash');
 var fs = require('fs');
-var stitch = require('../../stitch/src/stitch');
+var stitch = require('stitch');
 var pmongo = require('promised-mongo');
 
 var builtDir = path.resolve(__dirname + '/../www');
