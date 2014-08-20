@@ -1,7 +1,6 @@
 var express = require('express');
 var Q = require('q');
 var path = require('path');
-var gitrev = require('git-rev');
 var mongo = require('mongodb');
 var _ = require('lodash');
 var fs = require('fs');
@@ -10,16 +9,18 @@ var pmongo = require('promised-mongo');
 
 var builtDir = path.resolve(__dirname + '/../www');
 var devDir = path.resolve(__dirname + '/../client');
-var rev = false;
 var isDev = process.env.NODE_ENV !== "production";
-var dbConnection = 'mongodb://127.0.0.1:27017/thinkDo';
 
 var readFile = Q.denodeify(fs.readFile);
-var db = pmongo(dbConnection, ['todos']);
-var todos = db.todos;
 var app = {
 	state: "Do"
 };
+
+var Firebase = require('firebase');
+var db = new Firebase("https://blinding-fire-3623.firebaseIO.com/");
+var usersRef = db.child('users');
+var todosRef = db.child('todos');
+
 
 function flood(layout, regions) {
 	return layout.replace(/region=\"([a-zA-Z]+?)\"([^>]*)>[^<]*</g, function() {
@@ -27,71 +28,72 @@ function flood(layout, regions) {
 	});
 }
 
+var getUser = function(userId) {
+	var deferred = Q.defer();
+	usersRef.child(userId).once('value', function (snapshot) {
+		deferred.resolve(snapshot.val());
+	});
+	return deferred.promise;
+};
+
+var getTodo = function(todoId) {
+	var deferred = Q.defer();
+	todosRef.child(todoId).once('value', function (snapshot) {
+		deferred.resolve(snapshot.val());
+	});
+	return deferred.promise;
+};
+
+var populateChildren = function(item) {
+	var deferred = Q.defer();
+	Q.all(Object.keys(item.children).map(getTodo))
+		.then(function(todos) {
+			item.children = todos;
+			deferred.resolve(item);
+		});
+	return deferred.promise;
+};
+
+var addTitleText = function(user) {
+	user.text = 'Think/Do';
+	return user;
+};
+
+var getPopulatedUser = function(userId) {
+	return getUser(userId).then(populateChildren).then(addTitleText);
+};
+
+var getPopulatedTodo = function(userId) {
+	return getTodo(userId).then(populateChildren);
+};
+
+// templates
+var layout = readFile(__dirname + '/views/index.tck', "utf-8");
+var toolbar = readFile(path.resolve(__dirname + '/../client/mods/toolbar/toolbar.hb'), 'utf-8');
+var list = readFile(path.resolve(__dirname + '/../client/mods/list/list.hb'), 'utf-8');
+
 function setupServer(name, port, directory, built) {
 
 	// setup
 	var server = express();
 	server.use(express.static(directory));
-	server.use(function(req, res, next) {
-		if(built) {
-			rev = require(directory + '/build.json').revision;
-			next();
-		} else {
-			gitrev.short(function(currentRev) {
-				rev = currentRev;
-				next();
-			});
-		}
-	});
 
 	// web
 	server.get('/', function(req, res) {
 
-		// data
-		var todo = todos.findOne({
-			id: 'root'
-		}).then(function(todo) {
-			var deferred = Q.defer();
-			var fetches = [];
-			for (var i = 0; i < todo.children.length; i++) {
-				(function(i) {
-					fetches.push(todos.findOne({
-						id: todo.children[i]
-					}));
-				})(i);
-			}
-			Q.all(fetches).then(function(children) {
-				todo.children = children;
-				deferred.resolve(todo);
-			});
-			return deferred.promise;
-		});
-		var all = todos.find().toArray();
-
-		// templates
-		var layout = readFile(__dirname + '/views/index.tck', "utf-8");
-		var toolbar = readFile(path.resolve(__dirname + '/../client/mods/toolbar/toolbar.hb'), 'utf-8');
-		var list = readFile(path.resolve(__dirname + '/../client/mods/list/list.hb'), 'utf-8');
-
-		// build
 		Q.all([
-			todo,
-			all,
+			getPopulatedUser('u0'),
 			layout,
 			toolbar,
 			list
-		]).spread(function(todo, data, layout, toolbarTpl, listTpl) {
-			// layout = stitch({
-			// 	app: app,
-			// 	rev: rev
-			// }, layout);
+		]).spread(function(user, layout, toolbarTpl, listTpl) {
 			var toolbar = stitch({
 				app: app,
-				todo: todo
+				todo: user
 			}, toolbarTpl);
 			var list = stitch({
 				app: app,
-				todo: todo
+				todo: user
 			}, listTpl);
 			res.send(flood(layout, {
 				toolbar: toolbar,
@@ -103,51 +105,19 @@ function setupServer(name, port, directory, built) {
 	server.get('/:id', function(req, res) {
 		if(req.params.id === 'favicon.ico') return;
 
-		// data
-		var todo = todos.findOne({
-			id: req.params.id
-		}).then(function(todo) {
-			var deferred = Q.defer();
-			var fetches = [];
-			for (var i = 0; i < todo.children.length; i++) {
-				(function(i) {
-					fetches.push(todos.findOne({
-						id: todo.children[i]
-					}));
-				})(i);
-			}
-			Q.all(fetches).then(function(children) {
-				todo.children = children;
-				deferred.resolve(todo);
-			});
-			return deferred.promise;
-		});
-		var all = todos.find().toArray();
-
-		// templates
-		var layout = readFile(__dirname + '/views/index.tck', "utf-8");
-		var toolbar = readFile(path.resolve(__dirname + '/../client/mods/toolbar/toolbar.hb'), 'utf-8');
-		var list = readFile(path.resolve(__dirname + '/../client/mods/list/list.hb'), 'utf-8');
-
-		// build
 		Q.all([
-			todo,
-			all,
+			getPopulatedTodo(req.params.id),
 			layout,
 			toolbar,
 			list
-		]).spread(function(todo, data, layout, toolbarTpl, listTpl) {
-			// layout = stitch({
-			// 	app: app,
-			// 	rev: rev
-			// }, layout);
+		]).spread(function(user, layout, toolbarTpl, listTpl) {
 			var toolbar = stitch({
 				app: app,
-				todo: todo
+				todo: user
 			}, toolbarTpl);
 			var list = stitch({
 				app: app,
-				todo: todo
+				todo: user
 			}, listTpl);
 			res.send(flood(layout, {
 				toolbar: toolbar,
