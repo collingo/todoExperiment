@@ -67,6 +67,31 @@ var getPopulatedTodo = function(userId) {
 	return getTodo(userId).then(populateChildren);
 };
 
+var composeHtml = function(todo, layout, toolbarTpl, listTpl) {
+	console.log(todo);
+	var toolbar = stitch({
+		app: app,
+		todo: todo
+	}, toolbarTpl);
+	var list = stitch({
+		app: app,
+		todo: todo
+	}, listTpl);
+	return flood(layout, {
+		toolbar: toolbar,
+		content: list
+	});
+};
+
+var getHtmlFor = function(getCurrentTargetPromise) {
+	return Q.all([
+		getCurrentTargetPromise,
+		layout,
+		toolbar,
+		list
+	]).spread(composeHtml);
+};
+
 // templates
 var layout = readFile(__dirname + '/views/index.tck', "utf-8");
 var toolbar = readFile(path.resolve(__dirname + '/../client/mods/toolbar/toolbar.hb'), 'utf-8');
@@ -80,51 +105,15 @@ function setupServer(name, port, directory, built) {
 
 	// web
 	server.get('/', function(req, res) {
-
-		Q.all([
-			getPopulatedUser('u0'),
-			layout,
-			toolbar,
-			list
-		]).spread(function(user, layout, toolbarTpl, listTpl) {
-			var toolbar = stitch({
-				app: app,
-				todo: user
-			}, toolbarTpl);
-			var list = stitch({
-				app: app,
-				todo: user
-			}, listTpl);
-			res.send(flood(layout, {
-				toolbar: toolbar,
-				content: list
-			}));
+		getHtmlFor(getPopulatedUser('u0')).then(function(html) {
+			res.send(html);
 		});
-
 	});
 	server.get('/:id', function(req, res) {
 		if(req.params.id === 'favicon.ico') return;
-
-		Q.all([
-			getPopulatedTodo(req.params.id),
-			layout,
-			toolbar,
-			list
-		]).spread(function(user, layout, toolbarTpl, listTpl) {
-			var toolbar = stitch({
-				app: app,
-				todo: user
-			}, toolbarTpl);
-			var list = stitch({
-				app: app,
-				todo: user
-			}, listTpl);
-			res.send(flood(layout, {
-				toolbar: toolbar,
-				content: list
-			}));
+		getHtmlFor(getPopulatedTodo(req.params.id)).then(function(html) {
+			res.send(html);
 		});
-
 	});
 
 	// api
